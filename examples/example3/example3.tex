@@ -1,0 +1,84 @@
+\documentclass{report}
+\usepackage{python}
+
+\begin{document}
+An overview of the \LaTeX\ Expression python module, presenting all its main features.
+All the variable names, values and units are merely illustrative.
+\begin{python}[example3.import.py]
+	v1 = latexexpr.Variable('a_2',1.23,'mm')
+	print v1.toLaTeXVariableAll('newVarA')
+	print latexexpr.toLaTeXVariable('newVarB','\\texttt{VAR\_B}')
+	latexexpr.saveVars(locals())
+\end{python}\input{\jobname.py.out}
+% for some reason, if you define new variale, you have to run
+% \input{\jobname.py.out} explicitelly after \end{python}. 
+
+Firstly, we can define a \LaTeX\ variables \texttt{\textbackslash newVarA}
+and \texttt{\textbackslash newVarB} using a python script.
+These variables ($\newVarA$ and \newVarB) can be used in any way.
+
+We also used \texttt{saveVars()} function.
+Since next python environment will always invoke a new python session,
+this and \texttt{loadVars()} function transfer defined variables from one session to the other:
+$$
+\begin{python}[example3.import.py]latexexpr.loadVars(locals()); print v1 \end{python}
+% 'inline' python environment (there should be no space between the first python
+% command, 'latexexpr.loadVars(locals());' in this case
+$$
+
+The Variable as well as Expression class output can be formatted in the following way:
+\begin{python}
+	from latexexpr import *
+	v1 = Variable('a',12345.67890123,'m')
+	v2 = Variable('a',12345.67890123,'m',exponent=3)
+	v4 = Variable('a',12345.67890123,'m',exponent=-3)
+	v3 = Variable('a',12345.67890123,'m',format='%.4f')
+	v5 = Variable('a',12345.67890123,'m',unitFormat='%s')
+	v6 = Variable('a',12345.67890123,'m',unitFormat='\mathtt{%s}',exponent=3,format='%.3f')
+	print r'\begin{eqnarray}'
+	print v1,; print r'\\'
+	print v2,; print r'\\'
+	print v3,; print r'\\'
+	print v4,; print r'\\'
+	print v5,; print r'\\'
+	print v6
+	print r'\end{eqnarray}'
+\end{python}
+
+And one complex example (with manual multiline split):
+\begin{python}
+	from latexexpr import *
+	v1 = Variable('a_3',2.34,'m')
+	v2 = Variable('D_1',4.32,'kN')
+	e1 = Expression('b',v2//v1,'kN/m')
+	v3 = Variable('M',63.56,'Nm')
+	v4 = Variable('g',9.81,'m2^{-2}')
+	v5 = Variable('g',9.81,'m2^{-2}')
+	o1 = (e1 + v3 - v4)/SQRT(ABS(v5))
+	e2 = Expression('q_2',SBRACKETS(o1+e1)*RBRACKETS(-v1+v2),'V')
+	print '$$'
+	print v1; print '$$\n$$'
+	print v2; print '$$\n$$'
+	print e1; print '$$\n$$'
+	print e2; print '$$\n$$'
+	print r'%s = %s = \nonumber\\'%(e2.name,e2.operation.strSymbolic())
+	print '$$\n$$'
+	print '= %s = %s'%(e2.operation.strSubstituted(),e2.strResultWithUnit())
+	print '$$'
+\end{python}
+
+\LaTeX\ Expression predefined operations:
+\begin{python}
+	from latexexpr import *
+	v1 = Variable('V_1',1.23,'km')
+	v2 = Variable('c_3',2.34,'km')
+	v3 = Variable('v_2',-3.45,'km')
+	for o in (ADD,MUL,MAX,MIN):
+	   print '$$ %s $$'%Expression('a',o(v1,v2,v3),'m')
+	for o in (SUB,DIV,DIV2,POW,ROOT,LOG):
+	   print '$$ %s $$'%Expression('a',o(v1,v2),'m')
+	for o in (NEG,POS,ABS,SQR,SQRT,SIN,COS,TAN,SINH,COSH,TANH,EXP,LN,LOG10,RBRACKETS,SBRACKETS,CBRACKETS,ABRACKETS):
+	   print '$$ %s $$'%Expression('a',o(v1),'m')
+\end{python}
+
+\end{document}

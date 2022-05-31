@@ -1,0 +1,1283 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>LaTeX Expression project documentation &mdash; LaTeX Expression 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="LaTeX Expression 0.1 documentation" href="#" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="#">LaTeX Expression 0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-latexexpr">
+<span id="latex-expression-project-documentation"></span><h1>LaTeX Expression project documentation<a class="headerlink" href="#module-latexexpr" title="Permalink to this headline">¶</a></h1>
+<p>LaTeX Expression is a Python module for easy LaTeX typesetting of algebraic expressions in symbolic form with automatic substitution and result computation,
+i.e. of the form var = generalExpression = substitutedExpression = result, e.g.</p>
+<div class="highlight-none"><div class="highlight"><pre>r = 3.0 m
+F = 4.0 kN
+M = r*F = 3.0*4.0 = 12 kNm
+</pre></div>
+</div>
+<p>The expression is based on <a class="reference internal" href="#latexexpr.Variable" title="latexexpr.Variable"><tt class="xref py py-class docutils literal"><span class="pre">Variable</span></tt></a> class, representing phisical or mathematical variable (with symbolic name, value and unit). <a class="reference internal" href="#latexexpr.Expression" title="latexexpr.Expression"><tt class="xref py py-class docutils literal"><span class="pre">Expression</span></tt></a> has similar meaning, except that instead of value it contains its <a class="reference internal" href="#latexexpr.Operation" title="latexexpr.Operation"><tt class="xref py py-class docutils literal"><span class="pre">Operation</span></tt></a>. <a class="reference internal" href="#latexexpr.Operation" title="latexexpr.Operation"><tt class="xref py py-class docutils literal"><span class="pre">Operation</span></tt></a> contains its type (all basic operations are implemented, see <a class="reference internal" href="#predefinedoperations"><em>Predefined Operation instance creation</em></a>) and combine one or more <a class="reference internal" href="#latexexpr.Variable" title="latexexpr.Variable"><tt class="xref py py-class docutils literal"><span class="pre">variable(s)</span></tt></a>, <a class="reference internal" href="#latexexpr.Expression" title="latexexpr.Expression"><tt class="xref py py-class docutils literal"><span class="pre">expression(s)</span></tt></a> or other <a class="reference internal" href="#latexexpr.Operation" title="latexexpr.Operation"><tt class="xref py py-class docutils literal"><span class="pre">operations</span></tt></a>. In this way, the hierarchy of operations may be combined in one <a class="reference internal" href="#latexexpr.Expression" title="latexexpr.Expression"><tt class="xref py py-class docutils literal"><span class="pre">Expression</span></tt></a>. Furthermore, where it is reasonable, Python operators are overloaded to make things even more simple and clear.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">v1</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="s">&#39;a_{22}&#39;</span><span class="p">,</span><span class="mf">3.45</span><span class="p">,</span><span class="s">&#39;mm&#39;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">v1</span>
+<span class="go">a_{22} = 3.45 \ \mathrm{mm}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">v2</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="s">&#39;F&#39;</span><span class="p">,</span><span class="mf">5.876934835</span><span class="p">,</span><span class="s">&#39;kN&#39;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">v2</span>
+<span class="go">F = 5.88 \ \mathrm{kN}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">v3</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="s">&#39;F&#39;</span><span class="p">,</span><span class="mf">4.34</span><span class="p">,</span><span class="s">&#39;kN&#39;</span><span class="p">,</span><span class="n">exponent</span><span class="o">=-</span><span class="mi">2</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">v3</span>
+<span class="go">F = { 434.00 \cdot 10^{-2} } \ \mathrm{kN}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">v4</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="s">&#39;F&#39;</span><span class="p">,</span><span class="mf">2.564345</span><span class="p">,</span><span class="s">&#39;kN&#39;</span><span class="p">,</span><span class="n">format</span><span class="o">=</span><span class="s">&#39;</span><span class="si">%.4f</span><span class="s">&#39;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">v4</span>
+<span class="go">F = 2.5643 \ \mathrm{kN}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">v5</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="s">&#39;F&#39;</span><span class="p">,</span><span class="mf">5.876934835</span><span class="p">,</span><span class="s">&#39;kN&#39;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">v5</span>
+<span class="go">F = 5.88 \ \mathrm{kN}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">v6</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="s">&#39;F&#39;</span><span class="p">,</span><span class="o">-</span><span class="mf">6.543</span><span class="p">,</span><span class="s">&#39;kN&#39;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">o1</span> <span class="o">=</span> <span class="p">(</span><span class="n">v1</span> <span class="o">+</span> <span class="n">SQRT</span><span class="p">(</span><span class="n">v2</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="n">v3</span> <span class="o">*</span> <span class="n">v4</span><span class="p">)</span> <span class="o">+</span> <span class="n">v5</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">o1</span>
+<span class="go">\frac{ {a_{22}} + \sqrt{ {F} } }{ {F} \cdot {F} } + {F} = \frac{ 3.45 + \sqrt{ 5.88 } }{ { 434.00 \cdot 10^{-2} } \cdot 2.5643 } + 5.88</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e1</span> <span class="o">=</span> <span class="n">Expression</span><span class="p">(</span><span class="s">&#39;E_1^i&#39;</span><span class="p">,</span><span class="n">SBRACKETS</span><span class="p">(</span><span class="n">o1</span><span class="p">)</span> <span class="o">-</span> <span class="n">SQR</span><span class="p">(</span><span class="n">v6</span><span class="p">),</span><span class="s">&#39;kNm&#39;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">e1</span>
+<span class="go">E_1^i = \left[ \frac{ {a_{22}} + \sqrt{ {F} } }{ {F} \cdot {F} } + {F} \right] - {F}^2 = \left[ \frac{ 3.45 + \sqrt{ 5.88 } }{ { 434.00 \cdot 10^{-2} } \cdot 2.5643 } + 5.88 \right] - \left( -6.54 \right)^2 = \left(-36.41\right) \ \mathrm{kNm}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">v7</span> <span class="o">=</span> <span class="n">e1</span><span class="o">.</span><span class="n">toVariable</span><span class="p">()</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">v7</span>
+<span class="go">E_1^i = \left( -36.41 \right) \ \mathrm{kNm}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">v7</span><span class="o">.</span><span class="n">toLaTeXVariableAll</span><span class="p">(</span><span class="s">&#39;MYV7&#39;</span><span class="p">)</span>
+<span class="go">\def\MYV7{E_1^i = \left( -36.41 \right) \ \mathrm{kNm}}</span>
+</pre></div>
+</div>
+<p>The module is distributed under <a class="reference external" href="http://www.gnu.org/licenses/lgpl.html">GNU LGPL license</a></p>
+<p>To see the module &#8220;in action&#8221;, visit <a class="reference external" href="http://mech.fsv.cvut.cz/~stransky/en/software/latexexpr/">project home page</a>.</p>
+<div class="toctree-wrapper compound">
+<ul class="simple">
+</ul>
+</div>
+<div class="section" id="classes">
+<h2>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h2>
+<p>The module contains three fundamental classes: <a class="reference internal" href="#latexexpr.Variable" title="latexexpr.Variable"><tt class="xref py py-class docutils literal"><span class="pre">Variable</span></tt></a>, <a class="reference internal" href="#latexexpr.Operation" title="latexexpr.Operation"><tt class="xref py py-class docutils literal"><span class="pre">Operation</span></tt></a> and <a class="reference internal" href="#latexexpr.Expression" title="latexexpr.Expression"><tt class="xref py py-class docutils literal"><span class="pre">Expression</span></tt></a>.</p>
+<dl class="class">
+<dt id="latexexpr.Variable">
+<em class="property">class </em><tt class="descclassname">latexexpr.</tt><tt class="descname">Variable</tt><big>(</big><em>name</em>, <em>value</em>, <em>unit=''</em>, <em>format='%.2f'</em>, <em>unitFormat='\mathrm{%s}'</em>, <em>exponent=0</em><big>)</big><a class="headerlink" href="#latexexpr.Variable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class representing mathematical or physical variable, containing information about its symbolic name, value, phyical units and how to format it. It is a fundamental building block of <a class="reference internal" href="#latexexpr.Operation" title="latexexpr.Operation"><tt class="xref py py-class docutils literal"><span class="pre">operations</span></tt></a> and <a class="reference internal" href="#latexexpr.Expression" title="latexexpr.Expression"><tt class="xref py py-class docutils literal"><span class="pre">expressions</span></tt></a> instances.</p>
+<p>This class overloads str() method to return expression &#8220;name = value unit&#8221;.</p>
+<p>This class also overloads +,-,*,/ (division, 
+frac{...}{...} in LaTeX) and // (divsion, .../... in LaTeX) operators. They can be used with Variable, Expression or Operation instances resulting into new Operation instance.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>name</strong> (<em>str</em>) &#8211; symbolic name of the variable</li>
+<li><strong>value</strong> (<em>float|int</em>) &#8211; value of the variable</li>
+<li><strong>unit</strong> (<em>str</em>) &#8211; physical unit of the variable</li>
+<li><strong>format</strong> (<em>str</em>) &#8211; python string to be formatted with value (e.g. &#8216;%e&#8217;, &#8216;%g&#8217;, &#8216;%.4g&#8217;, &#8216;%.3f&#8217; etc.). See <a class="reference external" href="http://docs.python.org/2/library/stdtypes.html#string-formatting-operations">Python string formatting docs</a> for more details.</li>
+<li><strong>unitFormat</strong> (<em>str</em>) &#8211; <p>python string to be formatted with unit (default is &#8216;mathrm{%s}&#8217; for non-italic units inside math mode). For no formatting use &#8216;%s&#8217;. See <a class="reference external" href="http://docs.python.org/2/library/stdtypes.html#string-formatting-operations">Python string formatting docs</a> for more details.</p>
+</li>
+<li><strong>exponent</strong> (<em>int</em>) &#8211; exponent for scientific representation</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Variables:</th><td class="field-body"><ul class="first last simple">
+<li><strong>name</strong> (<em>str</em>) &#8211; symbolic name</li>
+<li><strong>value</strong> (<em>float|int</em>) &#8211; numeric value</li>
+<li><strong>unit</strong> (<em>str</em>) &#8211; physical unit</li>
+<li><strong>format</strong> (<em>str</em>) &#8211; string to be formatted by the numeric value</li>
+<li><strong>unitFormat</strong> (<em>str</em>) &#8211; string to be formatted by physical unit string</li>
+<li><strong>exponent</strong> (<em>int</em>) &#8211; exponent for scientific representation. If 0, then no scientific representation is performed</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">v1</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="s">&#39;a_{22}&#39;</span><span class="p">,</span><span class="mf">3.45</span><span class="p">,</span><span class="s">&#39;mm&#39;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">v1</span>
+<span class="go">a_{22} = 3.45 \ \mathrm{mm}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">v2</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="s">&#39;F&#39;</span><span class="p">,</span><span class="mf">5.876934835</span><span class="p">,</span><span class="s">&#39;kN&#39;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">v2</span>
+<span class="go">F = 5.88 \ \mathrm{kN}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">v3</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="s">&#39;F&#39;</span><span class="p">,</span><span class="mf">4.34</span><span class="p">,</span><span class="s">&#39;kN&#39;</span><span class="p">,</span><span class="n">exponent</span><span class="o">=-</span><span class="mi">2</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">v3</span>
+<span class="go">F = { 434.00 \cdot 10^{-2} } \ \mathrm{kN}</span>
+</pre></div>
+</div>
+<dl class="method">
+<dt id="latexexpr.Variable.strSymbolic">
+<tt class="descname">strSymbolic</tt><big>(</big><big>)</big><a class="headerlink" href="#latexexpr.Variable.strSymbolic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns string of symbolic representation of receiver (its name)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">v1</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="s">&#39;a_{22}&#39;</span><span class="p">,</span><span class="mf">3.45</span><span class="p">,</span><span class="s">&#39;mm&#39;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">v1</span><span class="o">.</span><span class="n">strSymbolic</span><span class="p">()</span>
+<span class="go">{a_{22}}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="latexexpr.Variable.strSubstituted">
+<tt class="descname">strSubstituted</tt><big>(</big><big>)</big><a class="headerlink" href="#latexexpr.Variable.strSubstituted" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns string of numeric representation of receiver (its formatted value)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">v1</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="s">&#39;a_{22}&#39;</span><span class="p">,</span><span class="mf">3.45</span><span class="p">,</span><span class="s">&#39;mm&#39;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">v1</span><span class="o">.</span><span class="n">strSubstituted</span><span class="p">()</span>
+<span class="go">3.45</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="latexexpr.Variable.strResult">
+<tt class="descname">strResult</tt><big>(</big><em>format=''</em>, <em>exponent=0</em><big>)</big><a class="headerlink" href="#latexexpr.Variable.strResult" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns string of the result of the receiver (its formatted result)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>format</strong> (<em>str</em>) &#8211; how to format result if other than predefined in receiver is required</li>
+<li><strong>exponent</strong> (<em>int</em>) &#8211; exponent the returned string if other than predefined in receiver is required</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">str</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">v1</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="s">&#39;a_{22}&#39;</span><span class="p">,</span><span class="mf">3.45</span><span class="p">,</span><span class="s">&#39;mm&#39;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">v1</span><span class="o">.</span><span class="n">strResult</span><span class="p">()</span>
+<span class="go">3.45</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="latexexpr.Variable.strResultWithUnit">
+<tt class="descname">strResultWithUnit</tt><big>(</big><big>)</big><a class="headerlink" href="#latexexpr.Variable.strResultWithUnit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns string of the result of the receiver (its formatted result) ending with its units</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">v1</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="s">&#39;a_{22}&#39;</span><span class="p">,</span><span class="mf">3.45</span><span class="p">,</span><span class="s">&#39;mm&#39;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">v1</span><span class="o">.</span><span class="n">strResultWithUnit</span><span class="p">()</span>
+<span class="go">3.45 \ \mathrm{mm}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="latexexpr.Variable.result">
+<tt class="descname">result</tt><big>(</big><big>)</big><a class="headerlink" href="#latexexpr.Variable.result" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns numeric result of the receiver (its value)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">float|int</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">v1</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="s">&#39;a_{22}&#39;</span><span class="p">,</span><span class="mf">3.45</span><span class="p">,</span><span class="s">&#39;mm&#39;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">v1</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
+<span class="go">3.45</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="latexexpr.Variable.toLaTeXVariable">
+<tt class="descname">toLaTeXVariable</tt><big>(</big><em>name</em>, <em>what='float'</em>, <em>command='def'</em><big>)</big><a class="headerlink" href="#latexexpr.Variable.toLaTeXVariable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns latex expression converting receiver to LaTeX variable using def, newcommand, or renewcommand LaTeX command</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>name</strong> (<em>str</em>) &#8211; LaTeX name (without trailing \ symbol)</li>
+<li><strong>what</strong> (<em>str</em>) &#8211; what to include (&#8216;float&#8217; for numeric value, &#8216;str&#8217; for string value (with possible scientific .10^x), &#8216;valunit&#8217; for string value + unit , &#8216;all&#8217; for str(self)&#8217;</li>
+<li><strong>command</strong> (<em>str</em>) &#8211; LaTeX command to use (without trailing \ symbol) [&#8216;def&#8217;,&#8217;newcommand&#8217;,&#8217;renewcommand&#8217;]</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">v1</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="s">&#39;a_{22}&#39;</span><span class="p">,</span><span class="mf">3.45</span><span class="p">,</span><span class="s">&#39;mm&#39;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">v1</span><span class="o">.</span><span class="n">toLaTeXVariable</span><span class="p">(</span><span class="s">&#39;AA&#39;</span><span class="p">,</span><span class="s">&#39;float&#39;</span><span class="p">)</span>
+<span class="go">\def\AA{3.45}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">v1</span><span class="o">.</span><span class="n">toLaTeXVariable</span><span class="p">(</span><span class="s">&#39;AA&#39;</span><span class="p">,</span><span class="s">&#39;str&#39;</span><span class="p">,</span><span class="s">&#39;newcommand&#39;</span><span class="p">)</span>
+<span class="go">\newcommand{\AA}{3.45}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">v1</span><span class="o">.</span><span class="n">toLaTeXVariable</span><span class="p">(</span><span class="s">&#39;AA&#39;</span><span class="p">,</span><span class="s">&#39;valunit&#39;</span><span class="p">,</span><span class="s">&#39;renewcommand&#39;</span><span class="p">)</span>
+<span class="go">\renewcommand{\AA}{3.45 \ \mathrm{mm}}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">v1</span><span class="o">.</span><span class="n">toLaTeXVariable</span><span class="p">(</span><span class="s">&#39;AA&#39;</span><span class="p">,</span><span class="s">&#39;all&#39;</span><span class="p">,</span><span class="s">&#39;def&#39;</span><span class="p">)</span>
+<span class="go">\def\AA{a_{22} = 3.45 \ \mathrm{mm}}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="latexexpr.Variable.toLaTeXVariableFloat">
+<tt class="descname">toLaTeXVariableFloat</tt><big>(</big><em>name</em>, <em>command='def'</em><big>)</big><a class="headerlink" href="#latexexpr.Variable.toLaTeXVariableFloat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shotcut for <a class="reference internal" href="#latexexpr.Variable.toLaTeXVariable" title="latexexpr.Variable.toLaTeXVariable"><tt class="xref py py-meth docutils literal"><span class="pre">Variable.toLaTeXVariable()</span></tt></a> with what=&#8217;float&#8217;</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="latexexpr.Variable.toLaTeXVariableStr">
+<tt class="descname">toLaTeXVariableStr</tt><big>(</big><em>name</em>, <em>command='def'</em><big>)</big><a class="headerlink" href="#latexexpr.Variable.toLaTeXVariableStr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shotcut for <a class="reference internal" href="#latexexpr.Variable.toLaTeXVariable" title="latexexpr.Variable.toLaTeXVariable"><tt class="xref py py-meth docutils literal"><span class="pre">Variable.toLaTeXVariable()</span></tt></a> with what=&#8217;str&#8217;</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="latexexpr.Variable.toLaTeXVariableValUnit">
+<tt class="descname">toLaTeXVariableValUnit</tt><big>(</big><em>name</em>, <em>command='def'</em><big>)</big><a class="headerlink" href="#latexexpr.Variable.toLaTeXVariableValUnit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shotcut for <a class="reference internal" href="#latexexpr.Variable.toLaTeXVariable" title="latexexpr.Variable.toLaTeXVariable"><tt class="xref py py-meth docutils literal"><span class="pre">Variable.toLaTeXVariable()</span></tt></a> with what=&#8217;valunit&#8217;</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="latexexpr.Variable.toLaTeXVariableAll">
+<tt class="descname">toLaTeXVariableAll</tt><big>(</big><em>name</em>, <em>command='def'</em><big>)</big><a class="headerlink" href="#latexexpr.Variable.toLaTeXVariableAll" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shotcut for <a class="reference internal" href="#latexexpr.Variable.toLaTeXVariable" title="latexexpr.Variable.toLaTeXVariable"><tt class="xref py py-meth docutils literal"><span class="pre">Variable.toLaTeXVariable()</span></tt></a> with what=&#8217;all&#8217;</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="latexexpr.Variable.fromExpression">
+<tt class="descname">fromExpression</tt><big>(</big><em>expr</em><big>)</big><a class="headerlink" href="#latexexpr.Variable.fromExpression" title="Permalink to this definition">¶</a></dt>
+<dd><p>Copy information from given Expression or Variable. Returns changed receiver</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>expr</strong> (<em>Variable|Expression</em>) &#8211; given expression to be copied</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">Variable</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="latexexpr.Variable.copy">
+<tt class="descname">copy</tt><big>(</big><big>)</big><a class="headerlink" href="#latexexpr.Variable.copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns hard copy of receiver</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="latexexpr.Operation">
+<em class="property">class </em><tt class="descclassname">latexexpr.</tt><tt class="descname">Operation</tt><big>(</big><em>type</em>, <em>*args</em><big>)</big><a class="headerlink" href="#latexexpr.Operation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class representing mathematical operation applied to one, two or more objects. These objects may be of type Variable, Expression or Operation again, allowing builing a hieararchy of operations. Preferable way of creation of Operation instances is to use predefined functions (see <a class="reference internal" href="#predefinedoperations"><em>Predefined Operation instance creation</em></a>) or (where it is possible) standard Python operations +,-,*,/,**.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>type</strong> (<em>str</em>) &#8211; type of operation</li>
+<li><strong>args</strong> (<em>Variable(s)|Expression(s)|Operation(s)</em>) &#8211; Variables, Expressions, Operations to be combined by receiver</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">v1</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="s">&#39;a_{22}&#39;</span><span class="p">,</span><span class="mf">3.45</span><span class="p">,</span><span class="s">&#39;mm&#39;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">v2</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="s">&#39;F&#39;</span><span class="p">,</span><span class="mf">5.876934835</span><span class="p">,</span><span class="s">&#39;kN&#39;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">v3</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="s">&#39;F&#39;</span><span class="p">,</span><span class="mf">4.34</span><span class="p">,</span><span class="s">&#39;kN&#39;</span><span class="p">,</span><span class="n">exponent</span><span class="o">=-</span><span class="mi">2</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">v4</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="s">&#39;F&#39;</span><span class="p">,</span><span class="mf">2.564345</span><span class="p">,</span><span class="s">&#39;kN&#39;</span><span class="p">,</span><span class="n">format</span><span class="o">=</span><span class="s">&#39;</span><span class="si">%.4f</span><span class="s">&#39;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">v5</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="s">&#39;F&#39;</span><span class="p">,</span><span class="mf">5.876934835</span><span class="p">,</span><span class="s">&#39;kN&#39;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">v6</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="s">&#39;F&#39;</span><span class="p">,</span><span class="o">-</span><span class="mf">6.543</span><span class="p">,</span><span class="s">&#39;kN&#39;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">o3</span> <span class="o">=</span> <span class="p">(</span><span class="n">v1</span><span class="o">+</span><span class="n">v2</span><span class="p">)</span><span class="o">/</span><span class="n">v3</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">o3</span>
+<span class="go">\frac{ {a_{22}} + {F} }{ {F} } = \frac{ 3.45 + 5.88 }{ { 434.00 \cdot 10^{-2} } }</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e2</span> <span class="o">=</span> <span class="n">Expression</span><span class="p">(</span><span class="s">&#39;E_2&#39;</span><span class="p">,(</span><span class="n">v1</span><span class="o">+</span><span class="n">v2</span><span class="p">)</span><span class="o">/</span><span class="n">v3</span><span class="p">,</span><span class="s">&#39;mm&#39;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">o2</span> <span class="o">=</span> <span class="n">MUL</span><span class="p">(</span><span class="n">RBRACKETS</span><span class="p">(</span><span class="n">e2</span><span class="o">+</span><span class="n">v4</span><span class="p">),</span><span class="n">v5</span><span class="p">,</span><span class="n">v6</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">o2</span>
+<span class="go">\left( {E_2} + {F} \right) \cdot {F} \cdot {F} = \left( 2.15 + 2.5643 \right) \cdot 5.88 \cdot \left( -6.54 \right)</span>
+</pre></div>
+</div>
+<dl class="method">
+<dt id="latexexpr.Operation.strSymbolic">
+<tt class="descname">strSymbolic</tt><big>(</big><big>)</big><a class="headerlink" href="#latexexpr.Operation.strSymbolic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns string of symbolic representation of receiver</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">v1</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="s">&#39;a_{22}&#39;</span><span class="p">,</span><span class="mf">3.45</span><span class="p">,</span><span class="s">&#39;mm&#39;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">v2</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="s">&#39;F&#39;</span><span class="p">,</span><span class="mf">5.876934835</span><span class="p">,</span><span class="s">&#39;kN&#39;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">v3</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="s">&#39;F&#39;</span><span class="p">,</span><span class="mf">4.34</span><span class="p">,</span><span class="s">&#39;kN&#39;</span><span class="p">,</span><span class="n">exponent</span><span class="o">=-</span><span class="mi">2</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">o3</span> <span class="o">=</span> <span class="p">(</span><span class="n">v1</span><span class="o">+</span><span class="n">v2</span><span class="p">)</span><span class="o">/</span><span class="n">v3</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">o3</span><span class="o">.</span><span class="n">strSymbolic</span><span class="p">()</span>
+<span class="go">\frac{ {a_{22}} + {F} }{ {F} }</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="latexexpr.Operation.strSubstituted">
+<tt class="descname">strSubstituted</tt><big>(</big><big>)</big><a class="headerlink" href="#latexexpr.Operation.strSubstituted" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns string of substituted representation of receiver</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">v1</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="s">&#39;a_{22}&#39;</span><span class="p">,</span><span class="mf">3.45</span><span class="p">,</span><span class="s">&#39;mm&#39;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">v2</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="s">&#39;F&#39;</span><span class="p">,</span><span class="mf">5.876934835</span><span class="p">,</span><span class="s">&#39;kN&#39;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">v3</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="s">&#39;F&#39;</span><span class="p">,</span><span class="mf">4.34</span><span class="p">,</span><span class="s">&#39;kN&#39;</span><span class="p">,</span><span class="n">exponent</span><span class="o">=-</span><span class="mi">2</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">o3</span> <span class="o">=</span> <span class="p">(</span><span class="n">v1</span><span class="o">+</span><span class="n">v2</span><span class="p">)</span><span class="o">/</span><span class="n">v3</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">o3</span><span class="o">.</span><span class="n">strSubstituted</span><span class="p">()</span>
+<span class="go">\frac{ 3.45 + 5.88 }{ { 434.00 \cdot 10^{-2} } }</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="latexexpr.Operation.strResult">
+<tt class="descname">strResult</tt><big>(</big><em>format=''</em>, <em>exponent=0</em><big>)</big><a class="headerlink" href="#latexexpr.Operation.strResult" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns string of the result of the receiver (its formatted result)</p>
+<blockquote>
+<div><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param str format:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body">how to format result if other than predefined in receiver is required</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">param int exponent:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body">exponent the returned string if other than predefined in receiver is required</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">rtype:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-python"><div class="highlight"><pre>
+</pre></div>
+</div>
+</div></blockquote>
+<p>%s</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="latexexpr.Operation.result">
+<tt class="descname">result</tt><big>(</big><big>)</big><a class="headerlink" href="#latexexpr.Operation.result" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns numeric result of the receiver</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">float|int</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">v1</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="s">&#39;a_{22}&#39;</span><span class="p">,</span><span class="mf">3.45</span><span class="p">,</span><span class="s">&#39;mm&#39;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">v2</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="s">&#39;F&#39;</span><span class="p">,</span><span class="mf">5.876934835</span><span class="p">,</span><span class="s">&#39;kN&#39;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">v3</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="s">&#39;F&#39;</span><span class="p">,</span><span class="mf">4.34</span><span class="p">,</span><span class="s">&#39;kN&#39;</span><span class="p">,</span><span class="n">exponent</span><span class="o">=-</span><span class="mi">2</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">o3</span> <span class="o">=</span> <span class="p">(</span><span class="n">v1</span><span class="o">+</span><span class="n">v2</span><span class="p">)</span><span class="o">/</span><span class="n">v3</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">o3</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
+<span class="go">2.14906332604</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="latexexpr.Operation.toVariable">
+<tt class="descname">toVariable</tt><big>(</big><em>newName=''</em>, <em>**kw</em><big>)</big><a class="headerlink" href="#latexexpr.Operation.toVariable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns new Variable instance with attributes copied from receiver</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>newName</strong> (<em>str</em>) &#8211; new name of returned variable</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Params dict kw:</th><td class="field-body">keyword arguments passed to Variable constructor</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">Variable</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="latexexpr.Expression">
+<em class="property">class </em><tt class="descclassname">latexexpr.</tt><tt class="descname">Expression</tt><big>(</big><em>name</em>, <em>operation</em>, <em>unit=''</em>, <em>format='%.2f'</em>, <em>unitFormat='\mathrm{%s}'</em>, <em>exponent=0</em><big>)</big><a class="headerlink" href="#latexexpr.Expression" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class representing mathematical expression</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>name</strong> (<em>str</em>) &#8211; symbolic name of the expression</li>
+<li><strong>operations</strong> (<em>[Variable|Expression]|Variable|Expression</em>) &#8211; list of lists of expressions and variables, defining the new instance hierarchy</li>
+<li><strong>unit</strong> (<em>str</em>) &#8211; physical unit of the variable</li>
+<li><strong>format</strong> (<em>str</em>) &#8211; <p>python string to be formatted (e.g. &#8216;%e&#8217;, &#8216;%g&#8217;, &#8216;%.4g&#8217;, &#8216;%.3f&#8217; etc.). See <a class="reference external" href="http://docs.python.org/2/library/stdtypes.html#string-formatting-operations">Python string formatting docs</a> for more details.</p>
+</li>
+<li><strong>unitFormat</strong> (<em>str</em>) &#8211; <p>python string to be formatted with unit (default is &#8216;mathrm{%s}&#8217; for non-italic units inside math mode). For no formatting use &#8216;%s&#8217;. See <a class="reference external" href="http://docs.python.org/2/library/stdtypes.html#string-formatting-operations">Python string formatting docs</a> for more details.</p>
+</li>
+<li><strong>exponent</strong> (<em>int</em>) &#8211; exponent for scientific representation</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">v1</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="s">&#39;a_{22}&#39;</span><span class="p">,</span><span class="mf">3.45</span><span class="p">,</span><span class="s">&#39;mm&#39;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">v2</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="s">&#39;F&#39;</span><span class="p">,</span><span class="mf">5.876934835</span><span class="p">,</span><span class="s">&#39;kN&#39;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">v3</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="s">&#39;F&#39;</span><span class="p">,</span><span class="mf">4.34</span><span class="p">,</span><span class="s">&#39;kN&#39;</span><span class="p">,</span><span class="n">exponent</span><span class="o">=-</span><span class="mi">2</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">v4</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="s">&#39;F&#39;</span><span class="p">,</span><span class="mf">2.564345</span><span class="p">,</span><span class="s">&#39;kN&#39;</span><span class="p">,</span><span class="n">format</span><span class="o">=</span><span class="s">&#39;</span><span class="si">%.4f</span><span class="s">&#39;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">v5</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="s">&#39;F&#39;</span><span class="p">,</span><span class="mf">5.876934835</span><span class="p">,</span><span class="s">&#39;kN&#39;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">v6</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="s">&#39;F&#39;</span><span class="p">,</span><span class="o">-</span><span class="mf">6.543</span><span class="p">,</span><span class="s">&#39;kN&#39;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">o1</span> <span class="o">=</span> <span class="p">(</span><span class="n">v1</span> <span class="o">+</span> <span class="n">SQRT</span><span class="p">(</span><span class="n">v2</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="n">v3</span> <span class="o">*</span> <span class="n">v4</span><span class="p">)</span> <span class="o">+</span> <span class="n">v5</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e1</span> <span class="o">=</span> <span class="n">Expression</span><span class="p">(</span><span class="s">&#39;E_1^i&#39;</span><span class="p">,</span><span class="n">SBRACKETS</span><span class="p">(</span><span class="n">o1</span><span class="p">)</span> <span class="o">-</span> <span class="n">SQR</span><span class="p">(</span><span class="n">v6</span><span class="p">),</span><span class="s">&#39;kNm&#39;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">e1</span>
+<span class="go">E_1^i = \left[ \frac{ {a_{22}} + \sqrt{ {F} } }{ {F} \cdot {F} } + {F} \right] - {F}^2 = \left[ \frac{ 3.45 + \sqrt{ 5.88 } }{ { 434.00 \cdot 10^{-2} } \cdot 2.5643 } + 5.88 \right] - \left( -6.54 \right)^2 = \left(-36.41\right) \ \mathrm{kNm}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e2</span> <span class="o">=</span> <span class="n">Expression</span><span class="p">(</span><span class="s">&#39;E_2&#39;</span><span class="p">,(</span><span class="n">v1</span><span class="o">+</span><span class="n">v2</span><span class="p">)</span><span class="o">/</span><span class="n">v3</span><span class="p">,</span><span class="s">&#39;mm&#39;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">e2</span>
+<span class="go">E_2 = \frac{ {a_{22}} + {F} }{ {F} } = \frac{ 3.45 + 5.88 }{ { 434.00 \cdot 10^{-2} } } = 2.15 \ \mathrm{mm}</span>
+</pre></div>
+</div>
+<dl class="method">
+<dt id="latexexpr.Expression.strSymbolic">
+<tt class="descname">strSymbolic</tt><big>(</big><big>)</big><a class="headerlink" href="#latexexpr.Expression.strSymbolic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns string of symbolic representation of receiver (its name)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">v1</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="s">&#39;a_{22}&#39;</span><span class="p">,</span><span class="mf">3.45</span><span class="p">,</span><span class="s">&#39;mm&#39;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">v2</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="s">&#39;F&#39;</span><span class="p">,</span><span class="mf">5.876934835</span><span class="p">,</span><span class="s">&#39;kN&#39;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">v3</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="s">&#39;F&#39;</span><span class="p">,</span><span class="mf">4.34</span><span class="p">,</span><span class="s">&#39;kN&#39;</span><span class="p">,</span><span class="n">exponent</span><span class="o">=-</span><span class="mi">2</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e2</span> <span class="o">=</span> <span class="n">Expression</span><span class="p">(</span><span class="s">&#39;E_2&#39;</span><span class="p">,(</span><span class="n">v1</span><span class="o">+</span><span class="n">v2</span><span class="p">)</span><span class="o">/</span><span class="n">v3</span><span class="p">,</span><span class="s">&#39;mm&#39;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">e2</span><span class="o">.</span><span class="n">strSymbolic</span><span class="p">()</span>
+<span class="go">{E_2}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="latexexpr.Expression.strSubstituted">
+<tt class="descname">strSubstituted</tt><big>(</big><big>)</big><a class="headerlink" href="#latexexpr.Expression.strSubstituted" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns string of numeric representation of receiver (its formatted result)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">v1</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="s">&#39;a_{22}&#39;</span><span class="p">,</span><span class="mf">3.45</span><span class="p">,</span><span class="s">&#39;mm&#39;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">v2</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="s">&#39;F&#39;</span><span class="p">,</span><span class="mf">5.876934835</span><span class="p">,</span><span class="s">&#39;kN&#39;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">v3</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="s">&#39;F&#39;</span><span class="p">,</span><span class="mf">4.34</span><span class="p">,</span><span class="s">&#39;kN&#39;</span><span class="p">,</span><span class="n">exponent</span><span class="o">=-</span><span class="mi">2</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e2</span> <span class="o">=</span> <span class="n">Expression</span><span class="p">(</span><span class="s">&#39;E_2&#39;</span><span class="p">,(</span><span class="n">v1</span><span class="o">+</span><span class="n">v2</span><span class="p">)</span><span class="o">/</span><span class="n">v3</span><span class="p">,</span><span class="s">&#39;mm&#39;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">e2</span><span class="o">.</span><span class="n">strSubstituted</span><span class="p">()</span>
+<span class="go">2.15</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="latexexpr.Expression.strResult">
+<tt class="descname">strResult</tt><big>(</big><em>format=''</em>, <em>exponent=0</em><big>)</big><a class="headerlink" href="#latexexpr.Expression.strResult" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns string of the result of the receiver (its formatted result)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>format</strong> (<em>str</em>) &#8211; how to format result if other than predefined in receiver is required</li>
+<li><strong>exponent</strong> (<em>int</em>) &#8211; exponent the returned string if other than predefined in receiver is required</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">str</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">v1</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="s">&#39;a_{22}&#39;</span><span class="p">,</span><span class="mf">3.45</span><span class="p">,</span><span class="s">&#39;mm&#39;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">v2</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="s">&#39;F&#39;</span><span class="p">,</span><span class="mf">5.876934835</span><span class="p">,</span><span class="s">&#39;kN&#39;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">v3</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="s">&#39;F&#39;</span><span class="p">,</span><span class="mf">4.34</span><span class="p">,</span><span class="s">&#39;kN&#39;</span><span class="p">,</span><span class="n">exponent</span><span class="o">=-</span><span class="mi">2</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e2</span> <span class="o">=</span> <span class="n">Expression</span><span class="p">(</span><span class="s">&#39;E_2&#39;</span><span class="p">,(</span><span class="n">v1</span><span class="o">+</span><span class="n">v2</span><span class="p">)</span><span class="o">/</span><span class="n">v3</span><span class="p">,</span><span class="s">&#39;mm&#39;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">e2</span><span class="o">.</span><span class="n">strResult</span><span class="p">()</span>
+<span class="go">2.15</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="latexexpr.Expression.strResultWithUnit">
+<tt class="descname">strResultWithUnit</tt><big>(</big><big>)</big><a class="headerlink" href="#latexexpr.Expression.strResultWithUnit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns string of the result of the receiver (its formatted result) ending with its units</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">v1</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="s">&#39;a_{22}&#39;</span><span class="p">,</span><span class="mf">3.45</span><span class="p">,</span><span class="s">&#39;mm&#39;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">v2</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="s">&#39;F&#39;</span><span class="p">,</span><span class="mf">5.876934835</span><span class="p">,</span><span class="s">&#39;kN&#39;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">v3</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="s">&#39;F&#39;</span><span class="p">,</span><span class="mf">4.34</span><span class="p">,</span><span class="s">&#39;kN&#39;</span><span class="p">,</span><span class="n">exponent</span><span class="o">=-</span><span class="mi">2</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e2</span> <span class="o">=</span> <span class="n">Expression</span><span class="p">(</span><span class="s">&#39;E_2&#39;</span><span class="p">,(</span><span class="n">v1</span><span class="o">+</span><span class="n">v2</span><span class="p">)</span><span class="o">/</span><span class="n">v3</span><span class="p">,</span><span class="s">&#39;mm&#39;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">e2</span><span class="o">.</span><span class="n">strResultWithUnit</span><span class="p">()</span>
+<span class="go">2.15 \ \mathrm{mm}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="latexexpr.Expression.result">
+<tt class="descname">result</tt><big>(</big><big>)</big><a class="headerlink" href="#latexexpr.Expression.result" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns numeric result of the receiver</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">float|int</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">v1</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="s">&#39;a_{22}&#39;</span><span class="p">,</span><span class="mf">3.45</span><span class="p">,</span><span class="s">&#39;mm&#39;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">v2</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="s">&#39;F&#39;</span><span class="p">,</span><span class="mf">5.876934835</span><span class="p">,</span><span class="s">&#39;kN&#39;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">v3</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="s">&#39;F&#39;</span><span class="p">,</span><span class="mf">4.34</span><span class="p">,</span><span class="s">&#39;kN&#39;</span><span class="p">,</span><span class="n">exponent</span><span class="o">=-</span><span class="mi">2</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e2</span> <span class="o">=</span> <span class="n">Expression</span><span class="p">(</span><span class="s">&#39;E_2&#39;</span><span class="p">,(</span><span class="n">v1</span><span class="o">+</span><span class="n">v2</span><span class="p">)</span><span class="o">/</span><span class="n">v3</span><span class="p">,</span><span class="s">&#39;mm&#39;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">e2</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
+<span class="go">2.14906332604</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="latexexpr.Expression.toVariable">
+<tt class="descname">toVariable</tt><big>(</big><em>newName=''</em><big>)</big><a class="headerlink" href="#latexexpr.Expression.toVariable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns new Variable instance with attributes copied from receiver</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>newName</strong> (<em>str</em>) &#8211; optional new name of returned variable</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">Variable</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="latexexpr.Expression.toLaTeXVariable">
+<tt class="descname">toLaTeXVariable</tt><big>(</big><em>name</em>, <em>what='float'</em>, <em>command='def'</em><big>)</big><a class="headerlink" href="#latexexpr.Expression.toLaTeXVariable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns latex expression converting receiver to LaTeX variable using def, newcommand, or renewcommand LaTeX command</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>name</strong> (<em>str</em>) &#8211; LaTeX name (without trailing \ symbol)</li>
+<li><strong>what</strong> (<em>str</em>) &#8211; what to include (&#8216;float&#8217; for numeric value, &#8216;str&#8217; for string value (with possible scientific .10^x), &#8216;valunit&#8217; for string value + unit , &#8216;symb&#8217; for symbolic expression, &#8216;subst&#8217; for substrituted expression and &#8216;all&#8217; for str(self)&#8217;</li>
+<li><strong>command</strong> (<em>str</em>) &#8211; LaTeX command to use (without trailing \ symbol) [&#8216;def&#8217;,&#8217;newcommand&#8217;,&#8217;renewcommand&#8217;]</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">v1</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="s">&#39;a_{22}&#39;</span><span class="p">,</span><span class="mf">3.45</span><span class="p">,</span><span class="s">&#39;mm&#39;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">v2</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="s">&#39;F&#39;</span><span class="p">,</span><span class="mf">5.876934835</span><span class="p">,</span><span class="s">&#39;kN&#39;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">v3</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="s">&#39;F&#39;</span><span class="p">,</span><span class="mf">4.34</span><span class="p">,</span><span class="s">&#39;kN&#39;</span><span class="p">,</span><span class="n">exponent</span><span class="o">=-</span><span class="mi">2</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e2</span> <span class="o">=</span> <span class="n">Expression</span><span class="p">(</span><span class="s">&#39;E_2&#39;</span><span class="p">,(</span><span class="n">v1</span><span class="o">+</span><span class="n">v2</span><span class="p">)</span><span class="o">/</span><span class="n">v3</span><span class="p">,</span><span class="s">&#39;mm&#39;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">e2</span><span class="o">.</span><span class="n">toLaTeXVariable</span><span class="p">(</span><span class="s">&#39;ETWO&#39;</span><span class="p">,</span><span class="s">&#39;float&#39;</span><span class="p">)</span>
+<span class="go">\def\ETWO{2.14906332604}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">e2</span><span class="o">.</span><span class="n">toLaTeXVariable</span><span class="p">(</span><span class="s">&#39;ETWO&#39;</span><span class="p">,</span><span class="s">&#39;str&#39;</span><span class="p">,</span><span class="s">&#39;newcommand&#39;</span><span class="p">)</span>
+<span class="go">\newcommand{\ETWO}{2.15}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">e2</span><span class="o">.</span><span class="n">toLaTeXVariable</span><span class="p">(</span><span class="s">&#39;ETWO&#39;</span><span class="p">,</span><span class="s">&#39;valunit&#39;</span><span class="p">,</span><span class="s">&#39;renewcommand&#39;</span><span class="p">)</span>
+<span class="go">\renewcommand{\ETWO}{2.15 \ \mathrm{mm}}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">e2</span><span class="o">.</span><span class="n">toLaTeXVariable</span><span class="p">(</span><span class="s">&#39;ETWO&#39;</span><span class="p">,</span><span class="s">&#39;symb&#39;</span><span class="p">)</span>
+<span class="go">\def\ETWO{{E_2}}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">e2</span><span class="o">.</span><span class="n">toLaTeXVariable</span><span class="p">(</span><span class="s">&#39;ETWO&#39;</span><span class="p">,</span><span class="s">&#39;subst&#39;</span><span class="p">)</span>
+<span class="go">\def\ETWO{2.15}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">e2</span><span class="o">.</span><span class="n">toLaTeXVariable</span><span class="p">(</span><span class="s">&#39;ETWO&#39;</span><span class="p">,</span><span class="s">&#39;all&#39;</span><span class="p">,</span><span class="s">&#39;def&#39;</span><span class="p">)</span>
+<span class="go">\def\ETWO{E_2 = \frac{ {a_{22}} + {F} }{ {F} } = \frac{ 3.45 + 5.88 }{ { 434.00 \cdot 10^{-2} } } = 2.15 \ \mathrm{mm}}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="latexexpr.Expression.toLaTeXVariableFloat">
+<tt class="descname">toLaTeXVariableFloat</tt><big>(</big><em>name</em>, <em>command='def'</em><big>)</big><a class="headerlink" href="#latexexpr.Expression.toLaTeXVariableFloat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shotcut for <a class="reference internal" href="#latexexpr.Variable.toLaTeXVariable" title="latexexpr.Variable.toLaTeXVariable"><tt class="xref py py-meth docutils literal"><span class="pre">Variable.toLaTeXVariable()</span></tt></a> with what=&#8217;float&#8217;</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="latexexpr.Expression.toLaTeXVariableStr">
+<tt class="descname">toLaTeXVariableStr</tt><big>(</big><em>name</em>, <em>command='def'</em><big>)</big><a class="headerlink" href="#latexexpr.Expression.toLaTeXVariableStr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shotcut for <a class="reference internal" href="#latexexpr.Variable.toLaTeXVariable" title="latexexpr.Variable.toLaTeXVariable"><tt class="xref py py-meth docutils literal"><span class="pre">Variable.toLaTeXVariable()</span></tt></a> with what=&#8217;str&#8217;</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="latexexpr.Expression.toLaTeXVariableValUnit">
+<tt class="descname">toLaTeXVariableValUnit</tt><big>(</big><em>name</em>, <em>command='def'</em><big>)</big><a class="headerlink" href="#latexexpr.Expression.toLaTeXVariableValUnit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shotcut for <a class="reference internal" href="#latexexpr.Variable.toLaTeXVariable" title="latexexpr.Variable.toLaTeXVariable"><tt class="xref py py-meth docutils literal"><span class="pre">Variable.toLaTeXVariable()</span></tt></a> with what=&#8217;valunit&#8217;</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="latexexpr.Expression.toLaTeXVariableSymb">
+<tt class="descname">toLaTeXVariableSymb</tt><big>(</big><em>name</em>, <em>command='def'</em><big>)</big><a class="headerlink" href="#latexexpr.Expression.toLaTeXVariableSymb" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shotcut for <a class="reference internal" href="#latexexpr.Variable.toLaTeXVariable" title="latexexpr.Variable.toLaTeXVariable"><tt class="xref py py-meth docutils literal"><span class="pre">Variable.toLaTeXVariable()</span></tt></a> with what=&#8217;symb&#8217;</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="latexexpr.Expression.toLaTeXVariableSubst">
+<tt class="descname">toLaTeXVariableSubst</tt><big>(</big><em>name</em>, <em>command='def'</em><big>)</big><a class="headerlink" href="#latexexpr.Expression.toLaTeXVariableSubst" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shotcut for <a class="reference internal" href="#latexexpr.Variable.toLaTeXVariable" title="latexexpr.Variable.toLaTeXVariable"><tt class="xref py py-meth docutils literal"><span class="pre">Variable.toLaTeXVariable()</span></tt></a> with what=&#8217;subst&#8217;</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="latexexpr.Expression.toLaTeXVariableAll">
+<tt class="descname">toLaTeXVariableAll</tt><big>(</big><em>name</em>, <em>command='def'</em><big>)</big><a class="headerlink" href="#latexexpr.Expression.toLaTeXVariableAll" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shotcut for <a class="reference internal" href="#latexexpr.Variable.toLaTeXVariable" title="latexexpr.Variable.toLaTeXVariable"><tt class="xref py py-meth docutils literal"><span class="pre">Variable.toLaTeXVariable()</span></tt></a> with what=&#8217;all&#8217;</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="predefined-operation-instance-creation">
+<span id="predefinedoperations"></span><h2>Predefined Operation instance creation<a class="headerlink" href="#predefined-operation-instance-creation" title="Permalink to this headline">¶</a></h2>
+<p>Preferable way to create new Operation instances. For each supported operation type there exists corresponding &#8220;constructor&#8221;. All such &#8220;constructors&#8221; return new Operation instance.</p>
+<dl class="function">
+<dt id="latexexpr.SUM">
+<tt class="descclassname">latexexpr.</tt><tt class="descname">SUM</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#latexexpr.SUM" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns addition Operation instance</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>args</strong> (<em>Variable(s)|Expression(s)|Operation(s)</em>) &#8211; 2 or more objects for summation ( arg0 + arg1 + ... + argLast)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="latexexpr.ADD">
+<tt class="descclassname">latexexpr.</tt><tt class="descname">ADD</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#latexexpr.ADD" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for <a class="reference internal" href="#latexexpr.SUM" title="latexexpr.SUM"><tt class="xref py py-func docutils literal"><span class="pre">SUM()</span></tt></a></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="latexexpr.PLUS">
+<tt class="descclassname">latexexpr.</tt><tt class="descname">PLUS</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#latexexpr.PLUS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for <a class="reference internal" href="#latexexpr.SUM" title="latexexpr.SUM"><tt class="xref py py-func docutils literal"><span class="pre">SUM()</span></tt></a></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="latexexpr.SUB">
+<tt class="descclassname">latexexpr.</tt><tt class="descname">SUB</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#latexexpr.SUB" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns subtraction Operation instance</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>args</strong> (<em>Variable(s)|Expression(s)|Operation(s)</em>) &#8211; 2 objects for subtraction ( arg0 - arg1)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="latexexpr.MINUS">
+<tt class="descclassname">latexexpr.</tt><tt class="descname">MINUS</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#latexexpr.MINUS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for <a class="reference internal" href="#latexexpr.SUB" title="latexexpr.SUB"><tt class="xref py py-func docutils literal"><span class="pre">SUB()</span></tt></a></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="latexexpr.MUL">
+<tt class="descclassname">latexexpr.</tt><tt class="descname">MUL</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#latexexpr.MUL" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns multiplication Operation instance</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>args</strong> (<em>Variable(s)|Expression(s)|Operation(s)</em>) &#8211; 2 or more objects for multiplication ( arg0 * arg1 * ... * argLast )</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="latexexpr.TIMES">
+<tt class="descclassname">latexexpr.</tt><tt class="descname">TIMES</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#latexexpr.TIMES" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for <a class="reference internal" href="#latexexpr.MUL" title="latexexpr.MUL"><tt class="xref py py-func docutils literal"><span class="pre">MUL()</span></tt></a></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="latexexpr.DIV">
+<tt class="descclassname">latexexpr.</tt><tt class="descname">DIV</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#latexexpr.DIV" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns division Operation instance (in LaTeX marked by \frac{...}{...})</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>args</strong> (<em>Variable(s)|Expression(s)|Operation(s)</em>) &#8211; 2 objects for division ( arg0 / arg1)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="latexexpr.DIV2">
+<tt class="descclassname">latexexpr.</tt><tt class="descname">DIV2</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#latexexpr.DIV2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns division Operation instance (in LaTeX marked by .../...</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>args</strong> (<em>Variable(s)|Expression(s)|Operation(s)</em>) &#8211; 2 objects for division ( arg0 / arg1)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="latexexpr.NEG">
+<tt class="descclassname">latexexpr.</tt><tt class="descname">NEG</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#latexexpr.NEG" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns negation Operation instance</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>args</strong> (<em>Variable|Expression|Operation</em>) &#8211; 1 objects for negation ( -arg0)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="latexexpr.POS">
+<tt class="descclassname">latexexpr.</tt><tt class="descname">POS</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#latexexpr.POS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the &#8220;positivition&#8221; (which does nothing actually) Operation instance</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>args</strong> (<em>Variable|Expression|Operation</em>) &#8211; 1 object</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="latexexpr.ABS">
+<tt class="descclassname">latexexpr.</tt><tt class="descname">ABS</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#latexexpr.ABS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns absolute value Operation instance</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>args</strong> (<em>Variable(s)|Expression(s)|Operation(s)</em>) &#8211; 1 objects for absolute value ( |arg0| )</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="latexexpr.MAX">
+<tt class="descclassname">latexexpr.</tt><tt class="descname">MAX</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#latexexpr.MAX" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns max Operation instance</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>args</strong> (<em>Variable(s)|Expression(s)|Operation(s)</em>) &#8211; 2 objects for max ( max(arg0,arg1,...,argN) )</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="latexexpr.MIN">
+<tt class="descclassname">latexexpr.</tt><tt class="descname">MIN</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#latexexpr.MIN" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns min Operation instance</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>args</strong> (<em>Variable(s)|Expression(s)|Operation(s)</em>) &#8211; 2 objects for min ( min(arg0,arg1,...,argN) )</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="latexexpr.POW">
+<tt class="descclassname">latexexpr.</tt><tt class="descname">POW</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#latexexpr.POW" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns power Operation instance</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>args</strong> (<em>Variable(s)|Expression(s)|Operation(s)</em>) &#8211; 2 objects for power ( arg0 ^ arg1)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="latexexpr.SQR">
+<tt class="descclassname">latexexpr.</tt><tt class="descname">SQR</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#latexexpr.SQR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns square Operation instance</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>args</strong> (<em>Variable|Expression|Operation</em>) &#8211; 1 objects for square ( arg ^ 2)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="latexexpr.SQRT">
+<tt class="descclassname">latexexpr.</tt><tt class="descname">SQRT</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#latexexpr.SQRT" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns square root Operation instance</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>args</strong> (<em>Variable|Expression|Operation</em>) &#8211; 1 objects for square root ( sqrt(arg) )</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="latexexpr.SIN">
+<tt class="descclassname">latexexpr.</tt><tt class="descname">SIN</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#latexexpr.SIN" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns sinus Operation instance</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>args</strong> (<em>Variable|Expression|Operation</em>) &#8211; 1 objects for sinus ( sin(arg) )</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="latexexpr.COS">
+<tt class="descclassname">latexexpr.</tt><tt class="descname">COS</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#latexexpr.COS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns cosinus Operation instance</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>args</strong> (<em>Variable|Expression|Operation</em>) &#8211; 1 objects for cosinus ( cos(arg) )</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="latexexpr.TAN">
+<tt class="descclassname">latexexpr.</tt><tt class="descname">TAN</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#latexexpr.TAN" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns tangent Operation instance</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>args</strong> (<em>Variable|Expression|Operation</em>) &#8211; 1 objects for tangent ( tan(arg) )</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="latexexpr.SINH">
+<tt class="descclassname">latexexpr.</tt><tt class="descname">SINH</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#latexexpr.SINH" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns hyperbolic sinus Operation instance</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>args</strong> (<em>Variable|Expression|Operation</em>) &#8211; 1 objects for hyperbolic sinus ( sin(arg) )</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="latexexpr.COSH">
+<tt class="descclassname">latexexpr.</tt><tt class="descname">COSH</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#latexexpr.COSH" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns hyperbolic cosinus Operation instance</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>args</strong> (<em>Variable|Expression|Operation</em>) &#8211; 1 objects for hyperbolic cosinus ( cos(arg) )</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="latexexpr.TANH">
+<tt class="descclassname">latexexpr.</tt><tt class="descname">TANH</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#latexexpr.TANH" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns hyperbolic tangent Operation instance</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>args</strong> (<em>Variable|Expression|Operation</em>) &#8211; 1 objects for hyperbolic tangent ( tan(arg) )</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="latexexpr.EXP">
+<tt class="descclassname">latexexpr.</tt><tt class="descname">EXP</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#latexexpr.EXP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns exp Operation instance</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>args</strong> (<em>Variable|Expression|Operation</em>) &#8211; 1 objects for exp ( exp(arg)=e^arg )</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="latexexpr.LOG">
+<tt class="descclassname">latexexpr.</tt><tt class="descname">LOG</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#latexexpr.LOG" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns logarithm Operation instance</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>args</strong> (<em>Variable|Expression|Operation</em>) &#8211; 2 objects for logarithm ( log_arg0(arg1) = ln(arg1)/ln(arg0) )</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="latexexpr.LN">
+<tt class="descclassname">latexexpr.</tt><tt class="descname">LN</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#latexexpr.LN" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns natural logarithm Operation instance</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>args</strong> (<em>Variable|Expression|Operation</em>) &#8211; 1 objects for natural logarithm ( ln(arg) )</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="latexexpr.LOG10">
+<tt class="descclassname">latexexpr.</tt><tt class="descname">LOG10</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#latexexpr.LOG10" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns decadic logarithm Operation instance</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>args</strong> (<em>Variable|Expression|Operation</em>) &#8211; 1 objects for decadic logarithm ( log_10(arg) )</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="latexexpr.RBRACKETS">
+<tt class="descclassname">latexexpr.</tt><tt class="descname">RBRACKETS</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#latexexpr.RBRACKETS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns round brackets Operation instance (wrapes passed argument to round brackets)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>args</strong> (<em>Variable|Expression|Operation</em>) &#8211; 1 objects for round brackets ( (arg) )</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="latexexpr.BRACKETS">
+<tt class="descclassname">latexexpr.</tt><tt class="descname">BRACKETS</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#latexexpr.BRACKETS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for <a class="reference internal" href="#latexexpr.RBRACKETS" title="latexexpr.RBRACKETS"><tt class="xref py py-func docutils literal"><span class="pre">RBRACKETS()</span></tt></a></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="latexexpr.SBRACKETS">
+<tt class="descclassname">latexexpr.</tt><tt class="descname">SBRACKETS</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#latexexpr.SBRACKETS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns square brackets Operation instance (wrapes passed argument to square brackets)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>args</strong> (<em>Variable|Expression|Operation</em>) &#8211; 1 objects for square brackets ( [arg] )</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="latexexpr.CBRACKETS">
+<tt class="descclassname">latexexpr.</tt><tt class="descname">CBRACKETS</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#latexexpr.CBRACKETS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns curly brackets Operation instance (wrapes passed argument to curly brackets)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>args</strong> (<em>Variable|Expression|Operation</em>) &#8211; 1 objects for curly brackets ( {arg} )</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="latexexpr.ABRACKETS">
+<tt class="descclassname">latexexpr.</tt><tt class="descname">ABRACKETS</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#latexexpr.ABRACKETS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns angle brackets Operation instance (wrapes passed argument to angle brackets)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>args</strong> (<em>Variable|Expression|Operation</em>) &#8211; 1 objects for angle brackets ( ⟨arg⟩ )</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="predefined-variable-instances">
+<h2>Predefined Variable instances<a class="headerlink" href="#predefined-variable-instances" title="Permalink to this headline">¶</a></h2>
+<p>Some predefined Variable instances which might be useful in constructing different expressions.</p>
+<dl class="data">
+<dt id="latexexpr.ONE">
+<tt class="descclassname">latexexpr.</tt><tt class="descname">ONE</tt><em class="property"> = &lt;latexexpr.Variable instance at 0x288b200&gt;</em><a class="headerlink" href="#latexexpr.ONE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Variable instance representing 1</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="latexexpr.TWO">
+<tt class="descclassname">latexexpr.</tt><tt class="descname">TWO</tt><em class="property"> = &lt;latexexpr.Variable instance at 0x288b290&gt;</em><a class="headerlink" href="#latexexpr.TWO" title="Permalink to this definition">¶</a></dt>
+<dd><p>Variable instance representing 2</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="latexexpr.E">
+<tt class="descclassname">latexexpr.</tt><tt class="descname">E</tt><em class="property"> = &lt;latexexpr.Variable instance at 0x288b248&gt;</em><a class="headerlink" href="#latexexpr.E" title="Permalink to this definition">¶</a></dt>
+<dd><p>Variable instance representing Euler number</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="latexexpr.PI">
+<tt class="descclassname">latexexpr.</tt><tt class="descname">PI</tt><em class="property"> = &lt;latexexpr.Variable instance at 0x288b320&gt;</em><a class="headerlink" href="#latexexpr.PI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Variable instance representing pi</p>
+</dd></dl>
+
+</div>
+<div class="section" id="other-module-members">
+<h2>Other module members<a class="headerlink" href="#other-module-members" title="Permalink to this headline">¶</a></h2>
+<p>Some other useful functions and other module members.</p>
+<dl class="exception">
+<dt id="latexexpr.LaTeXExpressionError">
+<em class="property">exception </em><tt class="descclassname">latexexpr.</tt><tt class="descname">LaTeXExpressionError</tt><big>(</big><em>msg</em><big>)</big><a class="headerlink" href="#latexexpr.LaTeXExpressionError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Module exception class</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="latexexpr.saveVars">
+<tt class="descclassname">latexexpr.</tt><tt class="descname">saveVars</tt><big>(</big><em>what</em>, <em>fileName='/tmp/latexexprglobals.out'</em><big>)</big><a class="headerlink" href="#latexexpr.saveVars" title="Permalink to this definition">¶</a></dt>
+<dd><p>Saves globally defined variables from current session into a file. This simplifies working within one LaTeX document, but several python sessions</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>what</strong> (<em>dict</em>) &#8211; dictionary object (like locals() or globals()) to be saved</li>
+<li><strong>fileName</strong> (<em>string</em>) &#8211; name of file to save the variables</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="latexexpr.loadVars">
+<tt class="descclassname">latexexpr.</tt><tt class="descname">loadVars</tt><big>(</big><em>what</em>, <em>fileName='/tmp/latexexprglobals.out'</em><big>)</big><a class="headerlink" href="#latexexpr.loadVars" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads saved variables form a file into global namespace</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>what</strong> (<em>dict</em>) &#8211; dictionary object (like locals() or globals()) that will be updated with laded values</li>
+<li><strong>fileName</strong> (<em>string</em>) &#8211; name of file with saved variables</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="latexexpr.toLaTeXVariable">
+<tt class="descclassname">latexexpr.</tt><tt class="descname">toLaTeXVariable</tt><big>(</big><em>name</em>, <em>what</em>, <em>command='def'</em><big>)</big><a class="headerlink" href="#latexexpr.toLaTeXVariable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns latex expression converting receiver to LaTeX variable using def, newcommand, or renewcommand LaTeX command</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>name</strong> (<em>str</em>) &#8211; LaTeX name (without trailing \ symbol)</li>
+<li><strong>what</strong> (<em>str</em>) &#8211; string of the variable body</li>
+<li><strong>command</strong> (<em>str</em>) &#8211; LaTeX command to use (without trailing \ symbol) [&#8216;def&#8217;,&#8217;newcommand&#8217;,&#8217;renewcommand&#8217;]</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">n</span><span class="p">,</span><span class="n">s</span> <span class="o">=</span> <span class="s">&#39;varName&#39;</span><span class="p">,</span><span class="s">&#39;some string content of the variable&#39;</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">toLaTeXVariable</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">s</span><span class="p">)</span>
+<span class="go">\def\varName{some string content of the variable}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">toLaTeXVariable</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">s</span><span class="p">,</span><span class="s">&#39;newcommand&#39;</span><span class="p">)</span>
+<span class="go">\newcommand{\varName}{some string content of the variable}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">toLaTeXVariable</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">s</span><span class="p">,</span><span class="s">&#39;renewcommand&#39;</span><span class="p">)</span>
+<span class="go">\renewcommand{\varName}{some string content of the variable}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="#">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">LaTeX Expression project documentation</a><ul>
+<li><a class="reference internal" href="#classes">Classes</a></li>
+<li><a class="reference internal" href="#predefined-operation-instance-creation">Predefined Operation instance creation</a></li>
+<li><a class="reference internal" href="#predefined-variable-instances">Predefined Variable instances</a></li>
+<li><a class="reference internal" href="#other-module-members">Other module members</a></li>
+</ul>
+</li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/index.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="#">LaTeX Expression 0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013  Jan Stránský.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,41 @@
+
+
+       LaTeX Expression : Python module for easy LaTeX typesetting of algebraic   
+   expressions in symbolic form with automatic substitution and result computation
+                               version 0.1 (2013-10-30)
+
+                          Copyright (C)  2013  Jan Stransky                       
+
+              Czech Technical University, Faculty of Civil Engineering,           
+          Department of Structural Mechanics, 166 29 Prague, Czech Republic       
+
+   LaTeX Expression is free software: you can redistribute it and/or modify it
+   under the terms of the GNU Lesser General Public License as published by the
+   Free Software Foundation, either version 3 of the License, or (at your option)
+   any later version.
+
+   LaTeX Expression is distributed in the hope that it will be useful, but WITHOUT
+   ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+   FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+   details.
+
+   You should have received a copy of the GNU Lesser General Public License along
+   with this program. If not, see <http://www.gnu.org/licenses/>.
+===============================================================================
+
+
+What is here
+===============================================================================
+The directory tree below holds source code to the latexexpr module. The
+directory "doc" contains html documentation (created by Sphinx) and the file
+latexexpr.py is a source code.
+
+Bugs
+==============================================================================
+
+Please mail all bug reports and suggestions to [jan.stransky@fsv.cvut.cz].
+I will try to give satisfaction, if the time is at least partially on my side. 
+
+
+                                Enjoy
+                                        Jan Stransky
