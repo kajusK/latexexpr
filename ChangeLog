@@ -1,3 +1,11 @@
+2015-03-03  Jan Stransky  <Jan.Stransky@fsv.cvut.cz>
+
+	* LaTeXExpression 0.3 released
+
+	* Added Sympy extension
+
+	* Improved documentation
+
 2014-03-25  Jan Stransky  <Jan.Stransky@fsv.cvut.cz>
 
 	* LaTeXExpression 0.2 released

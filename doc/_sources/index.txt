@@ -96,3 +96,15 @@ Some other useful functions and other module members.
 .. autofunction:: toLaTeXVariable
 
 
+Sympy extension
+**************************************
+.. automodule:: latexexpr.sympy
+
+Sympy functions
+====================
+.. autofunction:: latexexpr.sympy.simplify
+.. autofunction:: latexexpr.sympy.expand
+.. autofunction:: latexexpr.sympy.factor
+.. autofunction:: latexexpr.sympy.collect
+.. autofunction:: latexexpr.sympy.cancel
+.. autofunction:: latexexpr.sympy.apart

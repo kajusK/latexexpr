@@ -2,9 +2,9 @@
 
        LaTeX Expression : Python module for easy LaTeX typesetting of algebraic   
    expressions in symbolic form with automatic substitution and result computation
-                               version 0.2 (2014-03-25)
+                               version 0.3 (2015-03-03)
 
-                        Copyright (C)  2013-2014  Jan Stransky                       
+                        Copyright (C)  2013-2015  Jan Stransky                       
 
               Czech Technical University, Faculty of Civil Engineering,           
           Department of Structural Mechanics, 166 29 Prague, Czech Republic       
@@ -27,8 +27,9 @@
 What is here
 ===============================================================================
 The directory tree below holds source code to the latexexpr module. The
-directory "doc" contains html documentation (created by Sphinx) and the file
-latexexpr.py is a source code.
+directory "doc" contains html documentation (created by Sphinx), directory
+"module" contains Python source code and directory "examples" contains a few
+examples / tests.
 
 Bugs
 ==============================================================================

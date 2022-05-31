@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -8,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>LaTeX Expression project documentation &mdash; LaTeX Expression 0.2 documentation</title>
+    <title>LaTeX Expression project documentation &mdash; LaTeX Expression 0.3.dev documentation</title>
     
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '',
-        VERSION:     '0.2',
+        URL_ROOT:    './',
+        VERSION:     '0.3.dev',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="LaTeX Expression 0.2 documentation" href="#" /> 
+    <link rel="top" title="LaTeX Expression 0.3.dev documentation" href="#" /> 
   </head>
   <body>
     <div class="related">
@@ -37,7 +35,7 @@
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="#">LaTeX Expression 0.2 documentation</a> &raquo;</li> 
+        <li><a href="#">LaTeX Expression 0.3.dev documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -61,37 +59,37 @@ M = r*F = 3.0*4.0 = 12 kNm
 <span class="go">a_{22} = 3.45 \ \mathrm{mm}</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">v2</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="s">&#39;F&#39;</span><span class="p">,</span><span class="mf">5.876934835</span><span class="p">,</span><span class="s">&#39;kN&#39;</span><span class="p">)</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">v2</span>
-<span class="go">F = 5.88 \ \mathrm{kN}</span>
+<span class="go">F = 5.87693 \ \mathrm{kN}</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">v3</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="s">&#39;F&#39;</span><span class="p">,</span><span class="mf">4.34</span><span class="p">,</span><span class="s">&#39;kN&#39;</span><span class="p">,</span><span class="n">exponent</span><span class="o">=-</span><span class="mi">2</span><span class="p">)</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">v3</span>
-<span class="go">F = { 434.00 \cdot 10^{-2} } \ \mathrm{kN}</span>
+<span class="go">F = { 434 \cdot 10^{-2} } \ \mathrm{kN}</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">v4</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="s">&#39;F&#39;</span><span class="p">,</span><span class="mf">2.564345</span><span class="p">,</span><span class="s">&#39;kN&#39;</span><span class="p">,</span><span class="n">format</span><span class="o">=</span><span class="s">&#39;</span><span class="si">%.4f</span><span class="s">&#39;</span><span class="p">)</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">v4</span>
 <span class="go">F = 2.5643 \ \mathrm{kN}</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">v5</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="s">&#39;F&#39;</span><span class="p">,</span><span class="mf">5.876934835</span><span class="p">,</span><span class="s">&#39;kN&#39;</span><span class="p">)</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">v5</span>
-<span class="go">F = 5.88 \ \mathrm{kN}</span>
+<span class="go">F = 5.87693 \ \mathrm{kN}</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">v6</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="s">&#39;F&#39;</span><span class="p">,</span><span class="o">-</span><span class="mf">6.543</span><span class="p">,</span><span class="s">&#39;kN&#39;</span><span class="p">)</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">o1</span> <span class="o">=</span> <span class="p">(</span><span class="n">v1</span> <span class="o">+</span> <span class="n">SQRT</span><span class="p">(</span><span class="n">v2</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="n">v3</span> <span class="o">*</span> <span class="n">v4</span><span class="p">)</span> <span class="o">+</span> <span class="n">v5</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">o1</span>
-<span class="go">\frac{ {a_{22}} + \sqrt{ {F} } }{ {F} \cdot {F} } + {F} = \frac{ 3.45 + \sqrt{ 5.88 } }{ { 434.00 \cdot 10^{-2} } \cdot 2.5643 } + 5.88</span>
+<span class="go">\frac{ {a_{22}} + \sqrt{ {F} } }{ {F} \cdot {F} } + {F} = \frac{ 3.45 + \sqrt{ 5.87693 } }{ { 434 \cdot 10^{-2} } \cdot 2.5643 } + 5.87693</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">e1</span> <span class="o">=</span> <span class="n">Expression</span><span class="p">(</span><span class="s">&#39;E_1^i&#39;</span><span class="p">,</span><span class="n">SBRACKETS</span><span class="p">(</span><span class="n">o1</span><span class="p">)</span> <span class="o">-</span> <span class="n">SQR</span><span class="p">(</span><span class="n">v6</span><span class="p">),</span><span class="s">&#39;kNm&#39;</span><span class="p">)</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">e1</span>
-<span class="go">E_1^i = \left[ \frac{ {a_{22}} + \sqrt{ {F} } }{ {F} \cdot {F} } + {F} \right] - {F}^2 = \left[ \frac{ 3.45 + \sqrt{ 5.88 } }{ { 434.00 \cdot 10^{-2} } \cdot 2.5643 } + 5.88 \right] - \left( -6.54 \right)^2 = \left(-36.41\right) \ \mathrm{kNm}</span>
+<span class="go">E_1^i = \left[ \frac{ {a_{22}} + \sqrt{ {F} } }{ {F} \cdot {F} } + {F} \right] - {F}^2 = \left[ \frac{ 3.45 + \sqrt{ 5.87693 } }{ { 434 \cdot 10^{-2} } \cdot 2.5643 } + 5.87693 \right] - \left( -6.543 \right)^2 = \left(-36.4061\right) \ \mathrm{kNm}</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">v7</span> <span class="o">=</span> <span class="n">e1</span><span class="o">.</span><span class="n">toVariable</span><span class="p">()</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">v7</span>
-<span class="go">E_1^i</span>
+<span class="go">E_1^i = \left( -36.4061 \right) \ \mathrm{kNm}</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">v7</span><span class="o">.</span><span class="n">toLaTeXVariableAll</span><span class="p">(</span><span class="s">&#39;MYV7&#39;</span><span class="p">)</span>
-<span class="go">\def\MYV7{E_1^i}</span>
+<span class="go">\def\MYV7{E_1^i = \left( -36.4061 \right) \ \mathrm{kNm}}</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">v8</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="s">&#39;F&#39;</span><span class="p">,</span><span class="bp">None</span><span class="p">,</span><span class="s">&#39;kN&#39;</span><span class="p">)</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">o4</span> <span class="o">=</span> <span class="n">v1</span> <span class="o">+</span> <span class="n">v8</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">e4</span> <span class="o">=</span> <span class="n">Expression</span><span class="p">(</span><span class="s">&#39;E_4&#39;</span><span class="p">,</span><span class="n">o4</span><span class="p">,</span><span class="s">&#39;mF&#39;</span><span class="p">)</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">v8</span>
 <span class="go">F</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">o4</span>
-<span class="go">{a_{22}} + {F} = 3.45 + {F}</span>
+<span class="go">{a_{22}} + {F}</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">e4</span>
-<span class="go">E_4 = {a_{22}} + {F} = 3.45 + {F}</span>
+<span class="go">E_4 = {a_{22}} + {F}</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">v8</span><span class="o">.</span><span class="n">value</span><span class="o">=</span><span class="mf">2.34</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">v8</span>
 <span class="go">F = 2.34 \ \mathrm{kN}</span>
@@ -114,9 +112,9 @@ M = r*F = 3.0*4.0 = 12 kNm
 <h3>Varibable<a class="headerlink" href="#varibable" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
 <dt id="latexexpr.Variable">
-<em class="property">class </em><tt class="descclassname">latexexpr.</tt><tt class="descname">Variable</tt><big>(</big><em>name</em>, <em>value</em>, <em>unit=''</em>, <em>format='%.2f'</em>, <em>unitFormat='\mathrm{%s}'</em>, <em>exponent=0</em><big>)</big><a class="headerlink" href="#latexexpr.Variable" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">latexexpr.</tt><tt class="descname">Variable</tt><big>(</big><em>name</em>, <em>value=None</em>, <em>unit=''</em>, <em>format='%g'</em>, <em>unitFormat='\mathrm{%s}'</em>, <em>exponent=0</em><big>)</big><a class="headerlink" href="#latexexpr.Variable" title="Permalink to this definition">¶</a></dt>
 <dd><p>Class representing mathematical or physical variable, containing information about its symbolic name, value, phyical units and how to format it. It is a fundamental building block of <a class="reference internal" href="#latexexpr.Operation" title="latexexpr.Operation"><tt class="xref py py-class docutils literal"><span class="pre">operations</span></tt></a> and <a class="reference internal" href="#latexexpr.Expression" title="latexexpr.Expression"><tt class="xref py py-class docutils literal"><span class="pre">expressions</span></tt></a> instances.</p>
-<p>This class overloads str() method to return expression &#8220;name = value unit&#8221; and float() to return numeric result (throws exception if value is None)</p>
+<p>This class overloads str() method to return expression &#8220;name = value unit&#8221;, float() to return numeric result (throws exception if value is None) and abs() method.</p>
 <p>This class also overloads +,-,*,/ (division, frac{...}{...} in LaTeX), // (divsion, .../... in LaTeX) and ** (power) operators. They can be used with Variable, Expression or Operation instances resulting into new Operation instance.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -140,10 +138,10 @@ M = r*F = 3.0*4.0 = 12 kNm
 <span class="go">a_{22} = 3.45 \ \mathrm{mm}</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">v2</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="s">&#39;F&#39;</span><span class="p">,</span><span class="mf">5.876934835</span><span class="p">,</span><span class="s">&#39;kN&#39;</span><span class="p">)</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">v2</span>
-<span class="go">F = 5.88 \ \mathrm{kN}</span>
+<span class="go">F = 5.87693 \ \mathrm{kN}</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">v3</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="s">&#39;F&#39;</span><span class="p">,</span><span class="mf">4.34</span><span class="p">,</span><span class="s">&#39;kN&#39;</span><span class="p">,</span><span class="n">exponent</span><span class="o">=-</span><span class="mi">2</span><span class="p">)</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">v3</span>
-<span class="go">F = { 434.00 \cdot 10^{-2} } \ \mathrm{kN}</span>
+<span class="go">F = { 434 \cdot 10^{-2} } \ \mathrm{kN}</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">v8</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="s">&#39;F&#39;</span><span class="p">,</span><span class="bp">None</span><span class="p">,</span><span class="s">&#39;kN&#39;</span><span class="p">)</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">v8</span>
 <span class="go">F</span>
@@ -163,7 +161,7 @@ M = r*F = 3.0*4.0 = 12 kNm
 </table>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">v3</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="s">&#39;F&#39;</span><span class="p">,</span><span class="mf">4.34</span><span class="p">,</span><span class="s">&#39;kN&#39;</span><span class="p">,</span><span class="n">exponent</span><span class="o">=-</span><span class="mi">2</span><span class="p">)</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="nb">str</span><span class="p">(</span><span class="n">v3</span><span class="p">)</span>
-<span class="go">F = { 434.00 \cdot 10^{-2} } \ \mathrm{kN}</span>
+<span class="go">F = { 434 \cdot 10^{-2} } \ \mathrm{kN}</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">v8</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="s">&#39;F&#39;</span><span class="p">,</span><span class="bp">None</span><span class="p">,</span><span class="s">&#39;kN&#39;</span><span class="p">)</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="nb">str</span><span class="p">(</span><span class="n">v8</span><span class="p">)</span>
 <span class="go">F</span>
@@ -204,7 +202,7 @@ M = r*F = 3.0*4.0 = 12 kNm
 
 <dl class="attribute">
 <dt id="latexexpr.Variable.format">
-<tt class="descname">format</tt><em class="property"> = '%.2f'</em><a class="headerlink" href="#latexexpr.Variable.format" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">format</tt><em class="property"> = '%g  '</em><a class="headerlink" href="#latexexpr.Variable.format" title="Permalink to this definition">¶</a></dt>
 <dd><p>string to be formatted by the numeric value (with &#8216;%&#8217; operation)</p>
 </dd></dl>
 
@@ -399,12 +397,6 @@ M = r*F = 3.0*4.0 = 12 kNm
 </dd></dl>
 
 <dl class="method">
-<dt id="latexexpr.Variable.copy">
-<tt class="descname">copy</tt><big>(</big><big>)</big><a class="headerlink" href="#latexexpr.Variable.copy" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns hard copy of receiver</p>
-</dd></dl>
-
-<dl class="method">
 <dt id="latexexpr.Variable.isSymbolic">
 <tt class="descname">isSymbolic</tt><big>(</big><big>)</big><a class="headerlink" href="#latexexpr.Variable.isSymbolic" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns if receiver (or at least one of its sub-components) is purely symbolic variable without specific value</p>
@@ -440,14 +432,14 @@ M = r*F = 3.0*4.0 = 12 kNm
 <span class="gp">&gt;&gt;&gt; </span><span class="n">v8</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="s">&#39;F&#39;</span><span class="p">,</span><span class="bp">None</span><span class="p">,</span><span class="s">&#39;kN&#39;</span><span class="p">)</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">o3</span> <span class="o">=</span> <span class="p">(</span><span class="n">v1</span><span class="o">+</span><span class="n">v2</span><span class="p">)</span><span class="o">/</span><span class="n">v3</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">o3</span>
-<span class="go">\frac{ {a_{22}} + {F} }{ {F} } = \frac{ 3.45 + 5.88 }{ { 434.00 \cdot 10^{-2} } }</span>
+<span class="go">\frac{ {a_{22}} + {F} }{ {F} } = \frac{ 3.45 + 5.87693 }{ { 434 \cdot 10^{-2} } }</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">o4</span> <span class="o">=</span> <span class="n">v1</span> <span class="o">+</span> <span class="n">v8</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">o4</span>
-<span class="go">{a_{22}} + {F} = 3.45 + {F}</span>
+<span class="go">{a_{22}} + {F}</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">e2</span> <span class="o">=</span> <span class="n">Expression</span><span class="p">(</span><span class="s">&#39;E_2&#39;</span><span class="p">,(</span><span class="n">v1</span><span class="o">+</span><span class="n">v2</span><span class="p">)</span><span class="o">/</span><span class="n">v3</span><span class="p">,</span><span class="s">&#39;mm&#39;</span><span class="p">)</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">o2</span> <span class="o">=</span> <span class="n">MUL</span><span class="p">(</span><span class="n">RBRACKETS</span><span class="p">(</span><span class="n">e2</span><span class="o">+</span><span class="n">v4</span><span class="p">),</span><span class="n">v5</span><span class="p">,</span><span class="n">v6</span><span class="p">)</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">o2</span>
-<span class="go">\left( {E_2} + {F} \right) \cdot {F} \cdot {F} = \left( 2.15 + 2.5643 \right) \cdot 5.88 \cdot \left( -6.54 \right)</span>
+<span class="go">\left( {E_2} + {F} \right) \cdot {F} \cdot {F} = \left( 2.14906 + 2.5643 \right) \cdot 5.87693 \cdot \left( -6.543 \right)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">v8</span><span class="o">.</span><span class="n">value</span><span class="o">=</span><span class="mf">2.34</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">o4</span>
 <span class="go">{a_{22}} + {F} = 3.45 + 2.34</span>
@@ -470,7 +462,7 @@ M = r*F = 3.0*4.0 = 12 kNm
 <span class="gp">&gt;&gt;&gt; </span><span class="n">v3</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="s">&#39;F&#39;</span><span class="p">,</span><span class="mf">4.34</span><span class="p">,</span><span class="s">&#39;kN&#39;</span><span class="p">,</span><span class="n">exponent</span><span class="o">=-</span><span class="mi">2</span><span class="p">)</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">o3</span> <span class="o">=</span> <span class="p">(</span><span class="n">v1</span><span class="o">+</span><span class="n">v2</span><span class="p">)</span><span class="o">/</span><span class="n">v3</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="nb">str</span><span class="p">(</span><span class="n">o3</span><span class="p">)</span>
-<span class="go">\frac{ {a_{22}} + {F} }{ {F} } = \frac{ 3.45 + 5.88 }{ { 434.00 \cdot 10^{-2} } }</span>
+<span class="go">\frac{ {a_{22}} + {F} }{ {F} } = \frac{ 3.45 + 5.87693 }{ { 434 \cdot 10^{-2} } }</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -506,7 +498,7 @@ M = r*F = 3.0*4.0 = 12 kNm
 <dl class="attribute">
 <dt id="latexexpr.Operation.args">
 <tt class="descname">args</tt><em class="property"> = []</em><a class="headerlink" href="#latexexpr.Operation.args" title="Permalink to this definition">¶</a></dt>
-<dd><p>arument list subjected to the operation <a class="reference internal" href="#latexexpr.Operation.type" title="latexexpr.Operation.type"><tt class="xref py py-attr docutils literal"><span class="pre">Operation.type</span></tt></a></p>
+<dd><p>argument list subjected to the operation <a class="reference internal" href="#latexexpr.Operation.type" title="latexexpr.Operation.type"><tt class="xref py py-attr docutils literal"><span class="pre">Operation.type</span></tt></a></p>
 </dd></dl>
 
 <dl class="method">
@@ -548,7 +540,7 @@ M = r*F = 3.0*4.0 = 12 kNm
 <span class="gp">&gt;&gt;&gt; </span><span class="n">v3</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="s">&#39;F&#39;</span><span class="p">,</span><span class="mf">4.34</span><span class="p">,</span><span class="s">&#39;kN&#39;</span><span class="p">,</span><span class="n">exponent</span><span class="o">=-</span><span class="mi">2</span><span class="p">)</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">o3</span> <span class="o">=</span> <span class="p">(</span><span class="n">v1</span><span class="o">+</span><span class="n">v2</span><span class="p">)</span><span class="o">/</span><span class="n">v3</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">o3</span><span class="o">.</span><span class="n">strSubstituted</span><span class="p">()</span>
-<span class="go">\frac{ 3.45 + 5.88 }{ { 434.00 \cdot 10^{-2} } }</span>
+<span class="go">\frac{ 3.45 + 5.87693 }{ { 434 \cdot 10^{-2} } }</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -577,7 +569,7 @@ M = r*F = 3.0*4.0 = 12 kNm
 <span class="gp">&gt;&gt;&gt; </span><span class="n">v3</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="s">&#39;F&#39;</span><span class="p">,</span><span class="mf">4.34</span><span class="p">,</span><span class="s">&#39;kN&#39;</span><span class="p">,</span><span class="n">exponent</span><span class="o">=-</span><span class="mi">2</span><span class="p">)</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">o3</span> <span class="o">=</span> <span class="p">(</span><span class="n">v1</span><span class="o">+</span><span class="n">v2</span><span class="p">)</span><span class="o">/</span><span class="n">v3</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">o3</span><span class="o">.</span><span class="n">strResult</span><span class="p">()</span>
-<span class="go">2.15</span>
+<span class="go">2.14906</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -635,7 +627,7 @@ M = r*F = 3.0*4.0 = 12 kNm
 <h3>Expression<a class="headerlink" href="#expression" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
 <dt id="latexexpr.Expression">
-<em class="property">class </em><tt class="descclassname">latexexpr.</tt><tt class="descname">Expression</tt><big>(</big><em>name</em>, <em>operation</em>, <em>unit=''</em>, <em>format='%.2f'</em>, <em>unitFormat='\mathrm{%s}'</em>, <em>exponent=0</em><big>)</big><a class="headerlink" href="#latexexpr.Expression" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">latexexpr.</tt><tt class="descname">Expression</tt><big>(</big><em>name</em>, <em>operation</em>, <em>unit=''</em>, <em>format='%g'</em>, <em>unitFormat='\mathrm{%s}'</em>, <em>exponent=0</em><big>)</big><a class="headerlink" href="#latexexpr.Expression" title="Permalink to this definition">¶</a></dt>
 <dd><p>Class representing mathematical expression</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -665,14 +657,14 @@ M = r*F = 3.0*4.0 = 12 kNm
 <span class="gp">&gt;&gt;&gt; </span><span class="n">o1</span> <span class="o">=</span> <span class="p">(</span><span class="n">v1</span> <span class="o">+</span> <span class="n">SQRT</span><span class="p">(</span><span class="n">v2</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="n">v3</span> <span class="o">*</span> <span class="n">v4</span><span class="p">)</span> <span class="o">+</span> <span class="n">v5</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">e1</span> <span class="o">=</span> <span class="n">Expression</span><span class="p">(</span><span class="s">&#39;E_1^i&#39;</span><span class="p">,</span><span class="n">SBRACKETS</span><span class="p">(</span><span class="n">o1</span><span class="p">)</span> <span class="o">-</span> <span class="n">SQR</span><span class="p">(</span><span class="n">v6</span><span class="p">),</span><span class="s">&#39;kNm&#39;</span><span class="p">)</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">e1</span>
-<span class="go">E_1^i = \left[ \frac{ {a_{22}} + \sqrt{ {F} } }{ {F} \cdot {F} } + {F} \right] - {F}^2 = \left[ \frac{ 3.45 + \sqrt{ 5.88 } }{ { 434.00 \cdot 10^{-2} } \cdot 2.5643 } + 5.88 \right] - \left( -6.54 \right)^2 = \left(-36.41\right) \ \mathrm{kNm}</span>
+<span class="go">E_1^i = \left[ \frac{ {a_{22}} + \sqrt{ {F} } }{ {F} \cdot {F} } + {F} \right] - {F}^2 = \left[ \frac{ 3.45 + \sqrt{ 5.87693 } }{ { 434 \cdot 10^{-2} } \cdot 2.5643 } + 5.87693 \right] - \left( -6.543 \right)^2 = \left(-36.4061\right) \ \mathrm{kNm}</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">e2</span> <span class="o">=</span> <span class="n">Expression</span><span class="p">(</span><span class="s">&#39;E_2&#39;</span><span class="p">,(</span><span class="n">v1</span><span class="o">+</span><span class="n">v2</span><span class="p">)</span><span class="o">/</span><span class="n">v3</span><span class="p">,</span><span class="s">&#39;mm&#39;</span><span class="p">)</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">e2</span>
-<span class="go">E_2 = \frac{ {a_{22}} + {F} }{ {F} } = \frac{ 3.45 + 5.88 }{ { 434.00 \cdot 10^{-2} } } = 2.15 \ \mathrm{mm}</span>
+<span class="go">E_2 = \frac{ {a_{22}} + {F} }{ {F} } = \frac{ 3.45 + 5.87693 }{ { 434 \cdot 10^{-2} } } = 2.14906 \ \mathrm{mm}</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">o4</span> <span class="o">=</span> <span class="n">v1</span> <span class="o">+</span> <span class="n">v8</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">e4</span> <span class="o">=</span> <span class="n">Expression</span><span class="p">(</span><span class="s">&#39;E_4&#39;</span><span class="p">,</span><span class="n">o4</span><span class="p">,</span><span class="s">&#39;mF&#39;</span><span class="p">)</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">e4</span>
-<span class="go">E_4 = {a_{22}} + {F} = 3.45 + {F}</span>
+<span class="go">E_4 = {a_{22}} + {F}</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">v8</span><span class="o">.</span><span class="n">value</span><span class="o">=</span><span class="mf">2.34</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">e4</span>
 <span class="go">E_4 = {a_{22}} + {F} = 3.45 + 2.34 = 5.79 \ \mathrm{mF}</span>
@@ -695,7 +687,7 @@ M = r*F = 3.0*4.0 = 12 kNm
 <span class="gp">&gt;&gt;&gt; </span><span class="n">v3</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="s">&#39;F&#39;</span><span class="p">,</span><span class="mf">4.34</span><span class="p">,</span><span class="s">&#39;kN&#39;</span><span class="p">,</span><span class="n">exponent</span><span class="o">=-</span><span class="mi">2</span><span class="p">)</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">e2</span> <span class="o">=</span> <span class="n">Expression</span><span class="p">(</span><span class="s">&#39;E_2&#39;</span><span class="p">,(</span><span class="n">v1</span><span class="o">+</span><span class="n">v2</span><span class="p">)</span><span class="o">/</span><span class="n">v3</span><span class="p">,</span><span class="s">&#39;mm&#39;</span><span class="p">)</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="nb">str</span><span class="p">(</span><span class="n">e2</span><span class="p">)</span>
-<span class="go">E_2 = \frac{ {a_{22}} + {F} }{ {F} } = \frac{ 3.45 + 5.88 }{ { 434.00 \cdot 10^{-2} } } = 2.15 \ \mathrm{mm}</span>
+<span class="go">E_2 = \frac{ {a_{22}} + {F} }{ {F} } = \frac{ 3.45 + 5.87693 }{ { 434 \cdot 10^{-2} } } = 2.14906 \ \mathrm{mm}</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -742,7 +734,7 @@ M = r*F = 3.0*4.0 = 12 kNm
 
 <dl class="attribute">
 <dt id="latexexpr.Expression.format">
-<tt class="descname">format</tt><em class="property"> = '%.2f'</em><a class="headerlink" href="#latexexpr.Expression.format" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">format</tt><em class="property"> = '%g'</em><a class="headerlink" href="#latexexpr.Expression.format" title="Permalink to this definition">¶</a></dt>
 <dd><p>see <a class="reference internal" href="#latexexpr.Variable.format" title="latexexpr.Variable.format"><tt class="xref py py-attr docutils literal"><span class="pre">Variable.format</span></tt></a></p>
 </dd></dl>
 
@@ -803,7 +795,7 @@ M = r*F = 3.0*4.0 = 12 kNm
 <span class="gp">&gt;&gt;&gt; </span><span class="n">v3</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="s">&#39;F&#39;</span><span class="p">,</span><span class="mf">4.34</span><span class="p">,</span><span class="s">&#39;kN&#39;</span><span class="p">,</span><span class="n">exponent</span><span class="o">=-</span><span class="mi">2</span><span class="p">)</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">e2</span> <span class="o">=</span> <span class="n">Expression</span><span class="p">(</span><span class="s">&#39;E_2&#39;</span><span class="p">,(</span><span class="n">v1</span><span class="o">+</span><span class="n">v2</span><span class="p">)</span><span class="o">/</span><span class="n">v3</span><span class="p">,</span><span class="s">&#39;mm&#39;</span><span class="p">)</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">e2</span><span class="o">.</span><span class="n">strSubstituted</span><span class="p">()</span>
-<span class="go">2.15</span>
+<span class="go">2.14906</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -832,7 +824,7 @@ M = r*F = 3.0*4.0 = 12 kNm
 <span class="gp">&gt;&gt;&gt; </span><span class="n">v3</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="s">&#39;F&#39;</span><span class="p">,</span><span class="mf">4.34</span><span class="p">,</span><span class="s">&#39;kN&#39;</span><span class="p">,</span><span class="n">exponent</span><span class="o">=-</span><span class="mi">2</span><span class="p">)</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">e2</span> <span class="o">=</span> <span class="n">Expression</span><span class="p">(</span><span class="s">&#39;E_2&#39;</span><span class="p">,(</span><span class="n">v1</span><span class="o">+</span><span class="n">v2</span><span class="p">)</span><span class="o">/</span><span class="n">v3</span><span class="p">,</span><span class="s">&#39;mm&#39;</span><span class="p">)</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">e2</span><span class="o">.</span><span class="n">strResult</span><span class="p">()</span>
-<span class="go">2.15</span>
+<span class="go">2.14906</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -854,7 +846,7 @@ M = r*F = 3.0*4.0 = 12 kNm
 <span class="gp">&gt;&gt;&gt; </span><span class="n">v3</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="s">&#39;F&#39;</span><span class="p">,</span><span class="mf">4.34</span><span class="p">,</span><span class="s">&#39;kN&#39;</span><span class="p">,</span><span class="n">exponent</span><span class="o">=-</span><span class="mi">2</span><span class="p">)</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">e2</span> <span class="o">=</span> <span class="n">Expression</span><span class="p">(</span><span class="s">&#39;E_2&#39;</span><span class="p">,(</span><span class="n">v1</span><span class="o">+</span><span class="n">v2</span><span class="p">)</span><span class="o">/</span><span class="n">v3</span><span class="p">,</span><span class="s">&#39;mm&#39;</span><span class="p">)</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">e2</span><span class="o">.</span><span class="n">strResultWithUnit</span><span class="p">()</span>
-<span class="go">2.15 \ \mathrm{mm}</span>
+<span class="go">2.14906 \ \mathrm{mm}</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -921,15 +913,15 @@ M = r*F = 3.0*4.0 = 12 kNm
 <span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">e2</span><span class="o">.</span><span class="n">toLaTeXVariable</span><span class="p">(</span><span class="s">&#39;ETWO&#39;</span><span class="p">,</span><span class="s">&#39;float&#39;</span><span class="p">)</span>
 <span class="go">\def\ETWO{2.14906332604}</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">e2</span><span class="o">.</span><span class="n">toLaTeXVariable</span><span class="p">(</span><span class="s">&#39;ETWO&#39;</span><span class="p">,</span><span class="s">&#39;str&#39;</span><span class="p">,</span><span class="s">&#39;newcommand&#39;</span><span class="p">)</span>
-<span class="go">\newcommand{\ETWO}{2.15}</span>
+<span class="go">\newcommand{\ETWO}{2.14906}</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">e2</span><span class="o">.</span><span class="n">toLaTeXVariable</span><span class="p">(</span><span class="s">&#39;ETWO&#39;</span><span class="p">,</span><span class="s">&#39;valunit&#39;</span><span class="p">,</span><span class="s">&#39;renewcommand&#39;</span><span class="p">)</span>
-<span class="go">\renewcommand{\ETWO}{2.15 \ \mathrm{mm}}</span>
+<span class="go">\renewcommand{\ETWO}{2.14906 \ \mathrm{mm}}</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">e2</span><span class="o">.</span><span class="n">toLaTeXVariable</span><span class="p">(</span><span class="s">&#39;ETWO&#39;</span><span class="p">,</span><span class="s">&#39;symb&#39;</span><span class="p">)</span>
 <span class="go">\def\ETWO{{E_2}}</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">e2</span><span class="o">.</span><span class="n">toLaTeXVariable</span><span class="p">(</span><span class="s">&#39;ETWO&#39;</span><span class="p">,</span><span class="s">&#39;subst&#39;</span><span class="p">)</span>
-<span class="go">\def\ETWO{2.15}</span>
+<span class="go">\def\ETWO{2.14906}</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">e2</span><span class="o">.</span><span class="n">toLaTeXVariable</span><span class="p">(</span><span class="s">&#39;ETWO&#39;</span><span class="p">,</span><span class="s">&#39;all&#39;</span><span class="p">,</span><span class="s">&#39;def&#39;</span><span class="p">)</span>
-<span class="go">\def\ETWO{E_2 = \frac{ {a_{22}} + {F} }{ {F} } = \frac{ 3.45 + 5.88 }{ { 434.00 \cdot 10^{-2} } } = 2.15 \ \mathrm{mm}}</span>
+<span class="go">\def\ETWO{E_2 = \frac{ {a_{22}} + {F} }{ {F} } = \frac{ 3.45 + 5.87693 }{ { 434 \cdot 10^{-2} } } = 2.14906 \ \mathrm{mm}}</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -1397,25 +1389,25 @@ M = r*F = 3.0*4.0 = 12 kNm
 <p>Some predefined Variable instances which might be useful in constructing different expressions.</p>
 <dl class="data">
 <dt id="latexexpr.ONE">
-<tt class="descclassname">latexexpr.</tt><tt class="descname">ONE</tt><em class="property"> = &lt;latexexpr.Variable object at 0x3ab6250&gt;</em><a class="headerlink" href="#latexexpr.ONE" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">latexexpr.</tt><tt class="descname">ONE</tt><em class="property"> = &lt;latexexpr.Variable object at 0x7f72a8895bd0&gt;</em><a class="headerlink" href="#latexexpr.ONE" title="Permalink to this definition">¶</a></dt>
 <dd><p>Variable instance representing 1</p>
 </dd></dl>
 
 <dl class="data">
 <dt id="latexexpr.TWO">
-<tt class="descclassname">latexexpr.</tt><tt class="descname">TWO</tt><em class="property"> = &lt;latexexpr.Variable object at 0x3ab6290&gt;</em><a class="headerlink" href="#latexexpr.TWO" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">latexexpr.</tt><tt class="descname">TWO</tt><em class="property"> = &lt;latexexpr.Variable object at 0x7f72a8895c10&gt;</em><a class="headerlink" href="#latexexpr.TWO" title="Permalink to this definition">¶</a></dt>
 <dd><p>Variable instance representing 2</p>
 </dd></dl>
 
 <dl class="data">
 <dt id="latexexpr.E">
-<tt class="descclassname">latexexpr.</tt><tt class="descname">E</tt><em class="property"> = &lt;latexexpr.Variable object at 0x3ab62d0&gt;</em><a class="headerlink" href="#latexexpr.E" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">latexexpr.</tt><tt class="descname">E</tt><em class="property"> = &lt;latexexpr.Variable object at 0x7f72a8895c50&gt;</em><a class="headerlink" href="#latexexpr.E" title="Permalink to this definition">¶</a></dt>
 <dd><p>Variable instance representing Euler number</p>
 </dd></dl>
 
 <dl class="data">
 <dt id="latexexpr.PI">
-<tt class="descclassname">latexexpr.</tt><tt class="descname">PI</tt><em class="property"> = &lt;latexexpr.Variable object at 0x3ab6310&gt;</em><a class="headerlink" href="#latexexpr.PI" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">latexexpr.</tt><tt class="descname">PI</tt><em class="property"> = &lt;latexexpr.Variable object at 0x7f72a8895c90&gt;</em><a class="headerlink" href="#latexexpr.PI" title="Permalink to this definition">¶</a></dt>
 <dd><p>Variable instance representing pi</p>
 </dd></dl>
 
@@ -1495,6 +1487,257 @@ M = r*F = 3.0*4.0 = 12 kNm
 
 </div>
 </div>
+<div class="section" id="module-latexexpr.sympy">
+<span id="sympy-extension"></span><h1>Sympy extension<a class="headerlink" href="#module-latexexpr.sympy" title="Permalink to this headline">¶</a></h1>
+<p>latexexpr.sympy is an extension for LaTeXExpression for symbolic operations (specifically <a class="reference internal" href="#latexexpr.sympy.simplify" title="latexexpr.sympy.simplify"><tt class="xref py py-func docutils literal"><span class="pre">simplify()</span></tt></a>, <a class="reference internal" href="#latexexpr.sympy.expand" title="latexexpr.sympy.expand"><tt class="xref py py-func docutils literal"><span class="pre">expand()</span></tt></a>, <a class="reference internal" href="#latexexpr.sympy.factor" title="latexexpr.sympy.factor"><tt class="xref py py-func docutils literal"><span class="pre">factor()</span></tt></a>, <a class="reference internal" href="#latexexpr.sympy.collect" title="latexexpr.sympy.collect"><tt class="xref py py-func docutils literal"><span class="pre">collect()</span></tt></a>, <a class="reference internal" href="#latexexpr.sympy.cancel" title="latexexpr.sympy.cancel"><tt class="xref py py-func docutils literal"><span class="pre">cancel()</span></tt></a>, <a class="reference internal" href="#latexexpr.sympy.apart" title="latexexpr.sympy.apart"><tt class="xref py py-func docutils literal"><span class="pre">apart()</span></tt></a> functions). It requires <a class="reference external" href="http://www.sympy.org">sympy</a> module. Most of the examples in this documentation is borrowed from <a class="reference external" href="http://docs.sympy.org/dev/tutorial/simplification.html">sympy documentation</a>.</p>
+<p>If <a class="reference external" href="http://www.sympy.org">sympy</a> is present, it also defines aforementioned methods on <a class="reference internal" href="#latexexpr.Expression" title="latexexpr.Expression"><tt class="xref py py-class docutils literal"><span class="pre">Expression</span></tt></a> and <a class="reference internal" href="#latexexpr.Operation" title="latexexpr.Operation"><tt class="xref py py-class docutils literal"><span class="pre">Operation</span></tt></a> classes, so it is possible to use both <a class="reference internal" href="#latexexpr.sympy.simplify" title="latexexpr.sympy.simplify"><tt class="xref py py-func docutils literal"><span class="pre">simplify()</span></tt></a> and o.simplify():</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">latexexpr.sympy</span> <span class="kn">as</span> <span class="nn">lsympy</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">v1</span> <span class="o">=</span> <span class="n">latexexpr</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="s">&#39;v1&#39;</span><span class="p">,</span><span class="bp">None</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">v2</span> <span class="o">=</span> <span class="n">latexexpr</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="s">&#39;v2&#39;</span><span class="p">,</span><span class="bp">None</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">v3</span> <span class="o">=</span> <span class="n">latexexpr</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="s">&#39;v3&#39;</span><span class="p">,</span><span class="mf">1.23</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">v4</span> <span class="o">=</span> <span class="n">latexexpr</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="s">&#39;v4&#39;</span><span class="p">,</span><span class="mf">4.56</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">latexexpr</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="s">&#39;x&#39;</span><span class="p">,</span><span class="bp">None</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e1</span> <span class="o">=</span> <span class="n">latexexpr</span><span class="o">.</span><span class="n">Expression</span><span class="p">(</span><span class="s">&#39;e1&#39;</span><span class="p">,</span><span class="n">v1</span><span class="o">+</span><span class="n">v1</span><span class="o">+</span><span class="n">v2</span><span class="o">+</span><span class="n">v3</span><span class="o">+</span><span class="n">v2</span><span class="o">+</span><span class="n">v3</span><span class="o">-</span><span class="n">v4</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">e1</span>
+<span class="go">e1 = {v1} + {v1} + {v2} + {v3} + {v2} + {v3} - {v4}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">lsympy</span><span class="o">.</span><span class="n">simplify</span><span class="p">(</span><span class="n">e1</span><span class="p">)</span>
+<span class="go">e1 = \left( - {v4} \right) + {2} \cdot {v1} + {2} \cdot {v2} + {2} \cdot {v3}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">lsympy</span><span class="o">.</span><span class="n">simplify</span><span class="p">(</span><span class="n">e1</span><span class="p">,</span><span class="n">substituteFloats</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="go">e1 = {-2.1} + {2} \cdot {v1} + {2} \cdot {v2}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e1</span><span class="o">.</span><span class="n">simplify</span><span class="p">()</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">e1</span>
+<span class="go">e1 = \left( - {v4} \right) + {2} \cdot {v1} + {2} \cdot {v2} + {2} \cdot {v3}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e1</span><span class="o">.</span><span class="n">simplify</span><span class="p">(</span><span class="n">substituteFloats</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">e1</span>
+<span class="go">e1 = {-2.1} + {2} \cdot {v1} + {2} \cdot {v2}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e2</span> <span class="o">=</span> <span class="n">latexexpr</span><span class="o">.</span><span class="n">Expression</span><span class="p">(</span><span class="s">&#39;e2&#39;</span><span class="p">,</span><span class="n">latexexpr</span><span class="o">.</span><span class="n">SIN</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="n">latexexpr</span><span class="o">.</span><span class="n">COS</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">lsympy</span><span class="o">.</span><span class="n">simplify</span><span class="p">(</span><span class="n">e2</span><span class="p">)</span>
+<span class="go">e2 = 1 = 1 \ \mathrm{} = 1 \ \mathrm{}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e3</span> <span class="o">=</span> <span class="n">latexexpr</span><span class="o">.</span><span class="n">Expression</span><span class="p">(</span><span class="s">&#39;e3&#39;</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span><span class="o">**</span><span class="mi">3</span> <span class="o">+</span> <span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="n">x</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">lsympy</span><span class="o">.</span><span class="n">simplify</span><span class="p">(</span><span class="n">e3</span><span class="p">)</span>
+<span class="go">e3 = {-1} + {x}</span>
+</pre></div>
+</div>
+<div class="section" id="sympy-functions">
+<h2>Sympy functions<a class="headerlink" href="#sympy-functions" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="latexexpr.sympy.simplify">
+<tt class="descclassname">latexexpr.sympy.</tt><tt class="descname">simplify</tt><big>(</big><em>arg</em>, <em>substituteFloats=False</em>, <em>**kw</em><big>)</big><a class="headerlink" href="#latexexpr.sympy.simplify" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs simplify operation on arg. Symbolic variables are left symbolic, but variables with values are treated as the values (!)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>arg</strong> (<em>Variable|Operation|Expression</em>) &#8211; argument to be processed</li>
+<li><strong>substituteFloats</strong> (<em>bool</em>) &#8211; non-symbolic variables are treated as their float values if True, they are left otherwise</li>
+<li><strong>**kw</strong> &#8211; keywords for sympy.simplify() function</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">type(arg)</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">latexexpr.sympy</span> <span class="kn">as</span> <span class="nn">lsympy</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">v1</span> <span class="o">=</span> <span class="n">latexexpr</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="s">&#39;v1&#39;</span><span class="p">,</span><span class="bp">None</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">v2</span> <span class="o">=</span> <span class="n">latexexpr</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="s">&#39;v2&#39;</span><span class="p">,</span><span class="bp">None</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">v3</span> <span class="o">=</span> <span class="n">latexexpr</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="s">&#39;v3&#39;</span><span class="p">,</span><span class="mf">1.23</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">v4</span> <span class="o">=</span> <span class="n">latexexpr</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="s">&#39;v4&#39;</span><span class="p">,</span><span class="mf">4.56</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">latexexpr</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="s">&#39;x&#39;</span><span class="p">,</span><span class="bp">None</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e1</span> <span class="o">=</span> <span class="n">latexexpr</span><span class="o">.</span><span class="n">Expression</span><span class="p">(</span><span class="s">&#39;e1&#39;</span><span class="p">,</span><span class="n">v1</span><span class="o">+</span><span class="n">v1</span><span class="o">+</span><span class="n">v2</span><span class="o">+</span><span class="n">v3</span><span class="o">+</span><span class="n">v2</span><span class="o">+</span><span class="n">v3</span><span class="o">-</span><span class="n">v4</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">e1</span>
+<span class="go">e1 = {v1} + {v1} + {v2} + {v3} + {v2} + {v3} - {v4}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">lsympy</span><span class="o">.</span><span class="n">simplify</span><span class="p">(</span><span class="n">e1</span><span class="p">)</span>
+<span class="go">e1 = \left( - {v4} \right) + {2} \cdot {v1} + {2} \cdot {v2} + {2} \cdot {v3}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">lsympy</span><span class="o">.</span><span class="n">simplify</span><span class="p">(</span><span class="n">e1</span><span class="p">,</span><span class="n">substituteFloats</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="go">e1 = {-2.1} + {2} \cdot {v1} + {2} \cdot {v2}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e1</span><span class="o">.</span><span class="n">simplify</span><span class="p">()</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">e1</span>
+<span class="go">e1 = \left( - {v4} \right) + {2} \cdot {v1} + {2} \cdot {v2} + {2} \cdot {v3}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e1</span><span class="o">.</span><span class="n">simplify</span><span class="p">(</span><span class="n">substituteFloats</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">e1</span>
+<span class="go">e1 = {-2.1} + {2} \cdot {v1} + {2} \cdot {v2}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e2</span> <span class="o">=</span> <span class="n">latexexpr</span><span class="o">.</span><span class="n">Expression</span><span class="p">(</span><span class="s">&#39;e2&#39;</span><span class="p">,</span><span class="n">latexexpr</span><span class="o">.</span><span class="n">SIN</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="n">latexexpr</span><span class="o">.</span><span class="n">COS</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">lsympy</span><span class="o">.</span><span class="n">simplify</span><span class="p">(</span><span class="n">e2</span><span class="p">)</span>
+<span class="go">e2 = 1 = 1 \ \mathrm{} = 1 \ \mathrm{}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e3</span> <span class="o">=</span> <span class="n">latexexpr</span><span class="o">.</span><span class="n">Expression</span><span class="p">(</span><span class="s">&#39;e3&#39;</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span><span class="o">**</span><span class="mi">3</span> <span class="o">+</span> <span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="n">x</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">lsympy</span><span class="o">.</span><span class="n">simplify</span><span class="p">(</span><span class="n">e3</span><span class="p">)</span>
+<span class="go">e3 = {-1} + {x}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="latexexpr.sympy.expand">
+<tt class="descclassname">latexexpr.sympy.</tt><tt class="descname">expand</tt><big>(</big><em>arg</em>, <em>substituteFloats=False</em>, <em>**kw</em><big>)</big><a class="headerlink" href="#latexexpr.sympy.expand" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs expand operation on arg. Symbolic variables are left symbolic, but variables with values are treated as the values (!)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>arg</strong> (<em>Variable|Operation|Expression</em>) &#8211; argument to be processed</li>
+<li><strong>substituteFloats</strong> (<em>bool</em>) &#8211; non-symbolic variables are treated as their float values if True, they are left otherwise</li>
+<li><strong>**kw</strong> &#8211; keywords for sympy.expand() function</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">type(arg)</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">latexexpr.sympy</span> <span class="kn">as</span> <span class="nn">lsympy</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">latexexpr</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="s">&#39;x&#39;</span><span class="p">,</span><span class="bp">None</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e1</span> <span class="o">=</span> <span class="n">latexexpr</span><span class="o">.</span><span class="n">Expression</span><span class="p">(</span><span class="s">&#39;e1&#39;</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">lsympy</span><span class="o">.</span><span class="n">expand</span><span class="p">(</span><span class="n">e1</span><span class="p">,</span><span class="n">substituteFloats</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="go">e1 = {1} + {2} \cdot {x} + { {x} }^{ {2} }</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e2</span> <span class="o">=</span> <span class="n">latexexpr</span><span class="o">.</span><span class="n">Expression</span><span class="p">(</span><span class="s">&#39;e2&#39;</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span><span class="o">+</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="mi">3</span><span class="p">)</span> <span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">lsympy</span><span class="o">.</span><span class="n">expand</span><span class="p">(</span><span class="n">e2</span><span class="p">)</span>
+<span class="go">e2 = {-6} + \left( - {x} \right) + { {x} }^{ {2} }</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e3</span> <span class="o">=</span> <span class="n">latexexpr</span><span class="o">.</span><span class="n">Expression</span><span class="p">(</span><span class="s">&#39;e3&#39;</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">x</span> <span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">lsympy</span><span class="o">.</span><span class="n">expand</span><span class="p">(</span><span class="n">e3</span><span class="p">)</span>
+<span class="go">e3 = -2 = \left( -2 \right) \ \mathrm{} = \left(-2\right) \ \mathrm{}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="latexexpr.sympy.factor">
+<tt class="descclassname">latexexpr.sympy.</tt><tt class="descname">factor</tt><big>(</big><em>arg</em>, <em>substituteFloats=False</em>, <em>**kw</em><big>)</big><a class="headerlink" href="#latexexpr.sympy.factor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs factor operation on arg. Symbolic variables are left symbolic, but variables with values are treated as the values (!)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>arg</strong> (<em>Variable|Operation|Expression</em>) &#8211; argument to be processed</li>
+<li><strong>substituteFloats</strong> (<em>bool</em>) &#8211; non-symbolic variables are treated as their float values if True, they are left otherwise</li>
+<li><strong>**kw</strong> &#8211; keywords for sympy.factor() function</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">type(arg)</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">latexexpr.sympy</span> <span class="kn">as</span> <span class="nn">lsympy</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">latexexpr</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="s">&#39;x&#39;</span><span class="p">,</span><span class="bp">None</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">latexexpr</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="s">&#39;y&#39;</span><span class="p">,</span><span class="bp">None</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">z</span> <span class="o">=</span> <span class="n">latexexpr</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="s">&#39;z&#39;</span><span class="p">,</span><span class="bp">None</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e1</span> <span class="o">=</span> <span class="n">latexexpr</span><span class="o">.</span><span class="n">Expression</span><span class="p">(</span><span class="s">&#39;e1&#39;</span><span class="p">,</span> <span class="n">x</span><span class="o">**</span><span class="mi">3</span> <span class="o">-</span> <span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">x</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">lsympy</span><span class="o">.</span><span class="n">factor</span><span class="p">(</span><span class="n">e1</span><span class="p">)</span>
+<span class="go">e1 = \left( {1} + { {x} }^{ {2} } \right) \cdot \left( {-1} + {x} \right)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e2</span> <span class="o">=</span> <span class="n">latexexpr</span><span class="o">.</span><span class="n">Expression</span><span class="p">(</span><span class="s">&#39;e2&#39;</span><span class="p">,</span> <span class="n">x</span><span class="o">**</span><span class="mi">2</span><span class="o">*</span><span class="n">z</span> <span class="o">+</span> <span class="mi">4</span><span class="o">*</span><span class="n">x</span><span class="o">*</span><span class="n">y</span><span class="o">*</span><span class="n">z</span> <span class="o">+</span> <span class="mi">4</span><span class="o">*</span><span class="n">y</span><span class="o">**</span><span class="mi">2</span><span class="o">*</span><span class="n">z</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">lsympy</span><span class="o">.</span><span class="n">factor</span><span class="p">(</span><span class="n">e2</span><span class="p">)</span>
+<span class="go">e2 = {z} \cdot { {2} \cdot {y} + {x} }^{ {2} }</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="latexexpr.sympy.collect">
+<tt class="descclassname">latexexpr.sympy.</tt><tt class="descname">collect</tt><big>(</big><em>arg</em>, <em>syms</em>, <em>substituteFloats=False</em>, <em>**kw</em><big>)</big><a class="headerlink" href="#latexexpr.sympy.collect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs collect operation on arg. Symbolic variables are left symbolic, but variables with values are treated as the values (!)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>arg</strong> (<em>Variable|Operation|Expression</em>) &#8211; argument to be processed</li>
+<li><strong>syms</strong> (<em>Variable|[Variable]</em>) &#8211; variables to be collected</li>
+<li><strong>substituteFloats</strong> (<em>bool</em>) &#8211; non-symbolic variables are treated as their float values if True, they are left otherwise</li>
+<li><strong>**kw</strong> &#8211; keywords for sympy.collect() function</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">type(arg)</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">latexexpr.sympy</span> <span class="kn">as</span> <span class="nn">lsympy</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">latexexpr</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="s">&#39;x&#39;</span><span class="p">,</span><span class="bp">None</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">latexexpr</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="s">&#39;y&#39;</span><span class="p">,</span><span class="bp">None</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">z</span> <span class="o">=</span> <span class="n">latexexpr</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="s">&#39;z&#39;</span><span class="p">,</span><span class="bp">None</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e1</span> <span class="o">=</span> <span class="n">latexexpr</span><span class="o">.</span><span class="n">Expression</span><span class="p">(</span><span class="s">&#39;e1&#39;</span><span class="p">,</span> <span class="n">x</span><span class="o">*</span><span class="n">y</span> <span class="o">+</span> <span class="n">x</span> <span class="o">-</span> <span class="mi">3</span>  <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="n">z</span><span class="o">*</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">x</span><span class="o">**</span><span class="mi">3</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">lsympy</span><span class="o">.</span><span class="n">collect</span><span class="p">(</span><span class="n">e1</span><span class="p">,</span><span class="n">x</span><span class="p">)</span>
+<span class="go">e1 = {-3} + { {x} }^{ {3} } + {x} \cdot \left( {1} + {y} \right) + { {x} }^{ {2} } \cdot \left( {2} - {z} \right)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="latexexpr.sympy.cancel">
+<tt class="descclassname">latexexpr.sympy.</tt><tt class="descname">cancel</tt><big>(</big><em>arg</em>, <em>substituteFloats=False</em>, <em>**kw</em><big>)</big><a class="headerlink" href="#latexexpr.sympy.cancel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs cancel operation on arg. Symbolic variables are left symbolic, but variables with values are treated as the values (!)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>arg</strong> (<em>Variable|Operation|Expression</em>) &#8211; argument to be processed</li>
+<li><strong>substituteFloats</strong> (<em>bool</em>) &#8211; non-symbolic variables are treated as their float values if True, they are left otherwise</li>
+<li><strong>**kw</strong> &#8211; keywords for sympy.cancel() function</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">type(arg)</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">latexexpr.sympy</span> <span class="kn">as</span> <span class="nn">lsympy</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">latexexpr</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="s">&#39;x&#39;</span><span class="p">,</span><span class="bp">None</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">latexexpr</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="s">&#39;y&#39;</span><span class="p">,</span><span class="bp">None</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">z</span> <span class="o">=</span> <span class="n">latexexpr</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="s">&#39;z&#39;</span><span class="p">,</span><span class="bp">None</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e1</span> <span class="o">=</span> <span class="n">latexexpr</span><span class="o">.</span><span class="n">Expression</span><span class="p">(</span><span class="s">&#39;e1&#39;</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">x</span><span class="p">)</span> <span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">lsympy</span><span class="o">.</span><span class="n">cancel</span><span class="p">(</span><span class="n">e1</span><span class="p">)</span>
+<span class="go">e1 = \frac{ {1} }{ {x} } \cdot \left( {1} + {x} \right)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e2</span> <span class="o">=</span> <span class="n">latexexpr</span><span class="o">.</span><span class="n">Expression</span><span class="p">(</span><span class="s">&#39;e2&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="n">x</span> <span class="o">+</span> <span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="n">x</span><span class="o">/</span><span class="mi">2</span> <span class="o">-</span> <span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="mi">4</span><span class="p">)</span> <span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">lsympy</span><span class="o">.</span><span class="n">cancel</span><span class="p">(</span><span class="n">e2</span><span class="p">)</span>
+<span class="go">e2 = \frac{ {1} }{ {2} \cdot { {x} }^{ {2} } + {-8} \cdot {x} } \cdot \left( {-8} + {-2} \cdot {x} + {3} \cdot { {x} }^{ {2} } \right)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e3</span> <span class="o">=</span> <span class="n">latexexpr</span><span class="o">.</span><span class="n">Expression</span><span class="p">(</span><span class="s">&#39;e3&#39;</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">y</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="mi">2</span><span class="o">*</span><span class="n">x</span><span class="o">*</span><span class="n">y</span><span class="o">*</span><span class="n">z</span> <span class="o">+</span> <span class="n">x</span><span class="o">*</span><span class="n">z</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">y</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="mi">2</span><span class="o">*</span><span class="n">y</span><span class="o">*</span><span class="n">z</span> <span class="o">+</span> <span class="n">z</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">lsympy</span><span class="o">.</span><span class="n">cancel</span><span class="p">(</span><span class="n">e3</span><span class="p">)</span>
+<span class="go">e3 = \frac{ {1} }{ {-1} + {x} } \cdot \left( { {z} }^{ {2} } + {-2} \cdot {y} \cdot {z} + { {y} }^{ {2} } \right)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="latexexpr.sympy.apart">
+<tt class="descclassname">latexexpr.sympy.</tt><tt class="descname">apart</tt><big>(</big><em>arg</em>, <em>substituteFloats=False</em>, <em>**kw</em><big>)</big><a class="headerlink" href="#latexexpr.sympy.apart" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs apart operation on arg. Symbolic variables are left symbolic, but variables with values are treated as the values (!)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>arg</strong> (<em>Variable|Operation|Expression</em>) &#8211; argument to be processed</li>
+<li><strong>substituteFloats</strong> (<em>bool</em>) &#8211; non-symbolic variables are treated as their float values if True, they are left otherwise</li>
+<li><strong>**kw</strong> &#8211; keywords for sympy.apart() function</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">type(arg)</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">latexexpr.sympy</span> <span class="kn">as</span> <span class="nn">lsympy</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">latexexpr</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="s">&#39;x&#39;</span><span class="p">,</span><span class="bp">None</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e1</span> <span class="o">=</span> <span class="n">latexexpr</span><span class="o">.</span><span class="n">Expression</span><span class="p">(</span><span class="s">&#39;e1&#39;</span><span class="p">,</span> <span class="p">(</span><span class="mi">4</span><span class="o">*</span><span class="n">x</span><span class="o">**</span><span class="mi">3</span> <span class="o">+</span> <span class="mi">21</span><span class="o">*</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="mi">10</span><span class="o">*</span><span class="n">x</span> <span class="o">+</span> <span class="mi">12</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">x</span><span class="o">**</span><span class="mi">4</span> <span class="o">+</span> <span class="mi">5</span><span class="o">*</span><span class="n">x</span><span class="o">**</span><span class="mi">3</span> <span class="o">+</span> <span class="mi">5</span><span class="o">*</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="mi">4</span><span class="o">*</span><span class="n">x</span><span class="p">)</span> <span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">lsympy</span><span class="o">.</span><span class="n">apart</span><span class="p">(</span><span class="n">e1</span><span class="p">)</span>
+<span class="go">e1 = \frac{ {1} }{ {1} + {x} + { {x} }^{ {2} } } \cdot \left( {-1} + {2} \cdot {x} \right) + \left( - \frac{ {1} }{ {4} + {x} } \right) + {3} \cdot \frac{ {1} }{ {x} }</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+</div>
 
 
           </div>
@@ -1514,6 +1757,10 @@ M = r*F = 3.0*4.0 = 12 kNm
 <li><a class="reference internal" href="#predefined-operation-instance-creation">Predefined Operation instance creation</a></li>
 <li><a class="reference internal" href="#predefined-variable-instances">Predefined Variable instances</a></li>
 <li><a class="reference internal" href="#other-module-members">Other module members</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-latexexpr.sympy">Sympy extension</a><ul>
+<li><a class="reference internal" href="#sympy-functions">Sympy functions</a></li>
 </ul>
 </li>
 </ul>
@@ -1549,12 +1796,12 @@ M = r*F = 3.0*4.0 = 12 kNm
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="#">LaTeX Expression 0.2 documentation</a> &raquo;</li> 
+        <li><a href="#">LaTeX Expression 0.3.dev documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2013-2014  Jan Stránský.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
   </body>
 </html>
