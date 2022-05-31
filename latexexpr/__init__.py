@@ -87,8 +87,8 @@ To see the module "in action", visit `project home page <http://mech.fsv.cvut.cz
 import math
 from functools import reduce
 
-version = '0.4.dev'
-date = '2015-03-03'
+version = '0.4'
+date = '2022-05-31'
 _DEBUG = False
 
 
