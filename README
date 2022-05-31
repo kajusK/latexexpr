@@ -2,7 +2,7 @@
 
        LaTeX Expression : Python module for easy LaTeX typesetting of algebraic   
    expressions in symbolic form with automatic substitution and result computation
-                               version 0.3 (2015-03-03)
+                             version 0.4.dev (2015-03-03)
 
                         Copyright (C)  2013-2015  Jan Stransky                       
 
