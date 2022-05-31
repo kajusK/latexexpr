@@ -1,28 +1,45 @@
 
 LaTeX Expression project documentation
-======================================
+**************************************
 .. automodule:: latexexpr
 
 .. toctree::
-	:maxdepth: 2
+	:maxdepth: 3
 
 
 Classes
--------
+=======
 The module contains three fundamental classes: :class:`Variable`, :class:`Operation` and :class:`Expression`.
 
+Varibable
+---------
 .. autoclass:: Variable
 	:members:
+
+	.. automethod:: __str__
+	.. automethod:: __float__
+
+Operation
+---------
 .. autoclass:: Operation
 	:members:
+
+	.. automethod:: __str__
+	.. automethod:: __float__
+
+Expression
+----------
 .. autoclass:: Expression
 	:members:
+
+	.. automethod:: __str__
+	.. automethod:: __float__
 
 
 .. _predefinedOperations:
 
 Predefined Operation instance creation
---------------------------------------
+======================================
 Preferable way to create new Operation instances. For each supported operation type there exists corresponding "constructor". All such "constructors" return new Operation instance.
 
 .. autofunction:: SUM
@@ -60,7 +77,7 @@ Preferable way to create new Operation instances. For each supported operation t
 
 
 Predefined Variable instances
------------------------------
+=============================
 Some predefined Variable instances which might be useful in constructing different expressions.
 
 .. autodata:: ONE
@@ -70,7 +87,7 @@ Some predefined Variable instances which might be useful in constructing differe
 
 
 Other module members
---------------------
+====================
 Some other useful functions and other module members.
 
 .. autoexception:: LaTeXExpressionError

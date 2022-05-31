@@ -67,6 +67,19 @@ And one complex example (with manual multiline split):
 	print '$$'
 \end{python}
 
+Also symbolic variables are supported,
+with the possibility to assign the value later:
+\begin{python}
+	from latexexpr import *
+	v1 = Variable('a_3',2.34,'m')
+	v2 = Variable('D_1',None,'kN')
+	e1 = Expression('b',v2//v1,'kN/m')
+	print '$$ %s $$'%e1
+	v2.value = 4.32
+	print '$$ %s $$'%e1
+\end{python}
+
+
 \LaTeX\ Expression predefined operations:
 \begin{python}
 	from latexexpr import *

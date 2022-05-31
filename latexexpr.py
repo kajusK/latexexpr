@@ -3,9 +3,9 @@
 #
 #      LaTeX Expression : Python module for easy LaTeX typesetting of algebraic   
 #  expressions in symbolic form with automatic substitution and result computation
-#                              version 0.1 (2013-10-30)
+#                              version 0.2 (2014-03-25)
 #  
-#                         Copyright (C)  2013  Jan Stransky                       
+#                       Copyright (C)  2013-2014  Jan Stransky                       
 #  
 #             Czech Technical University, Faculty of Civil Engineering,           
 #         Department of Structural Mechanics, 166 29 Prague, Czech Republic       
@@ -23,7 +23,7 @@
 #  You should have received a copy of the GNU Lesser General Public License along
 #  with this program. If not, see <http://www.gnu.org/licenses/>.
 
-"""
+r"""
 LaTeX Expression is a Python module for easy LaTeX typesetting of algebraic expressions in symbolic form with automatic substitution and result computation,
 i.e. of the form var = generalExpression = substitutedExpression = result, e.g.
 
@@ -33,22 +33,65 @@ i.e. of the form var = generalExpression = substitutedExpression = result, e.g.
 	F = 4.0 kN
 	M = r*F = 3.0*4.0 = 12 kNm
 
-The expression is based on :class:`.Variable` class, representing phisical or mathematical variable (with symbolic name, value and unit). :class:`Expression` has similar meaning, except that instead of value it contains its :class:`Operation`. :class:`Operation` contains its type (all basic operations are implemented, see :ref:`predefinedOperations`) and combine one or more :class:`variable(s) <.Variable>`, :class:`expression(s) <.Expression>` or other :class:`operations <.Operation>`. In this way, the hierarchy of operations may be combined in one :class:`Expression`. Furthermore, where it is reasonable, Python operators are overloaded to make things even more simple and clear.
+The expression is based on :class:`.Variable` class, representing physical or mathematical variable (with symbolic name, value and unit). :class:`Expression` has similar meaning, except that instead of value it contains its :class:`Operation`. :class:`Operation` contains its type (all basic operations are implemented, see :ref:`predefinedOperations`) and combine one or more :class:`variable(s) <.Variable>`, :class:`expression(s) <.Expression>` or other :class:`operations <.Operation>`. In this way, the hierarchy of operations may be combined in one :class:`Expression`. Furthermore, where it is reasonable, Python operators are overloaded to make things even more simple and clear.
 
 .. code-block:: python
 
-%s
+	>>> v1 = Variable('a_{22}',3.45,'mm') 
+	>>> print v1
+	a_{22} = 3.45 \ \mathrm{mm}
+	>>> v2 = Variable('F',5.876934835,'kN') 
+	>>> print v2
+	F = 5.88 \ \mathrm{kN}
+	>>> v3 = Variable('F',4.34,'kN',exponent=-2) 
+	>>> print v3
+	F = { 434.00 \cdot 10^{-2} } \ \mathrm{kN}
+	>>> v4 = Variable('F',2.564345,'kN',format='%.4f') 
+	>>> print v4
+	F = 2.5643 \ \mathrm{kN}
+	>>> v5 = Variable('F',5.876934835,'kN') 
+	>>> print v5
+	F = 5.88 \ \mathrm{kN}
+	>>> v6 = Variable('F',-6.543,'kN') 
+	>>> o1 = (v1 + SQRT(v2)) / (v3 * v4) + v5 
+	>>> print o1
+	\frac{ {a_{22}} + \sqrt{ {F} } }{ {F} \cdot {F} } + {F} = \frac{ 3.45 + \sqrt{ 5.88 } }{ { 434.00 \cdot 10^{-2} } \cdot 2.5643 } + 5.88
+	>>> e1 = Expression('E_1^i',SBRACKETS(o1) - SQR(v6),'kNm') 
+	>>> print e1
+	E_1^i = \left[ \frac{ {a_{22}} + \sqrt{ {F} } }{ {F} \cdot {F} } + {F} \right] - {F}^2 = \left[ \frac{ 3.45 + \sqrt{ 5.88 } }{ { 434.00 \cdot 10^{-2} } \cdot 2.5643 } + 5.88 \right] - \left( -6.54 \right)^2 = \left(-36.41\right) \ \mathrm{kNm}
+	>>> v7 = e1.toVariable() 
+	>>> print v7
+	E_1^i
+	>>> print v7.toLaTeXVariableAll('MYV7')
+	\def\MYV7{E_1^i}
+	>>> v8 = Variable('F',None,'kN') 
+	>>> o4 = v1 + v8 
+	>>> e4 = Expression('E_4',o4,'mF') 
+	>>> print v8
+	F
+	>>> print o4
+	{a_{22}} + {F} = 3.45 + {F}
+	>>> print e4
+	E_4 = {a_{22}} + {F} = 3.45 + {F}
+	>>> v8.value=2.34 
+	>>> print v8
+	F = 2.34 \ \mathrm{kN}
+	>>> print o4
+	{a_{22}} + {F} = 3.45 + 2.34
+	>>> print e4
+	E_4 = {a_{22}} + {F} = 3.45 + 2.34 = 5.79 \ \mathrm{mF}
+
 
 The module is distributed under `GNU LGPL license <http://www.gnu.org/licenses/lgpl.html>`_
 
 To see the module "in action", visit `project home page <http://mech.fsv.cvut.cz/~stransky/en/software/latexexpr/>`_.
 """
+# some docstrings are not complete (containing %s formatting symbols) and are completed at the end of the script.
 
-#from math import e,pi,pow,sqrt,sin,cos,tan,exp,log,sinh,cosh,tanh
 import math
 
-version = '0.1'
-date = '2013-10-30'
+version = '0.2'
+date = '2014-03-25'
 _DEBUG = False
 
 
@@ -82,39 +125,52 @@ def _pos(self):     return POS(self)
 ######################################################################
 # Variable class
 ######################################################################
-class Variable:
-	"""Class representing mathematical or physical variable, containing information about its symbolic name, value, phyical units and how to format it. It is a fundamental building block of :class:`operations <.Operation>` and :class:`expressions <.Expression>` instances.
+class Variable(object):
+	r"""Class representing mathematical or physical variable, containing information about its symbolic name, value, phyical units and how to format it. It is a fundamental building block of :class:`operations <.Operation>` and :class:`expressions <.Expression>` instances.
 	
-	This class overloads str() method to return expression "name = value unit".
+	This class overloads str() method to return expression "name = value unit" and float() to return numeric result (throws exception if value is None)
 	
-	This class also overloads +,-,*,/ (division, 
-	frac{...}{...} in LaTeX) and // (divsion, .../... in LaTeX) operators. They can be used with Variable, Expression or Operation instances resulting into new Operation instance.
+	This class also overloads +,-,*,/ (division, frac{...}{...} in LaTeX), // (divsion, .../... in LaTeX) and ** (power) operators. They can be used with Variable, Expression or Operation instances resulting into new Operation instance.
 	
 	:param str name: symbolic name of the variable
-	:param float|int value: value of the variable
+	:param float|None value: value of the variable. If value==None, than the Variable is considered as symbolic
 	:param str unit: physical unit of the variable
-	:param str format: python string to be formatted with value (e.g. '%%e', '%%g', '%%.4g', '%%.3f' etc.). See `Python string formatting docs <http://docs.python.org/2/library/stdtypes.html#string-formatting-operations>`_ for more details.
-	:param str unitFormat: python string to be formatted with unit (default is '\mathrm{%%s}' for non-italic units inside math mode). For no formatting use '%%s'. See `Python string formatting docs <http://docs.python.org/2/library/stdtypes.html#string-formatting-operations>`_ for more details.
+	:param str format: python string to be formatted by the numeric value with '%' operation (e.g. '%e', '%g', '%.4g', '%.3f' etc.). See `Python string formatting docs <http://docs.python.org/2/library/stdtypes.html#string-formatting-operations>`_ for more details.
+	:param str unitFormat: python string to be formatted with unit (default is '\mathrm{%s}' for non-italic units inside math mode). For no formatting use '%s'. See `Python string formatting docs <http://docs.python.org/2/library/stdtypes.html#string-formatting-operations>`_ for more details.
 	:param int exponent: exponent for scientific representation
-	
-	:ivar str name: symbolic name
-	:ivar float|int value: numeric value
-	:ivar str unit: physical unit
-	:ivar str format: string to be formatted by the numeric value
-	:ivar str unitFormat: string to be formatted by physical unit string
-	:ivar int exponent: exponent for scientific representation. If 0, then no scientific representation is performed
 	
 	.. code-block:: python
 	
-%s
+		>>> v1 = Variable('a_{22}',3.45,'mm') 
+		>>> print v1
+		a_{22} = 3.45 \ \mathrm{mm}
+		>>> v2 = Variable('F',5.876934835,'kN') 
+		>>> print v2
+		F = 5.88 \ \mathrm{kN}
+		>>> v3 = Variable('F',4.34,'kN',exponent=-2) 
+		>>> print v3
+		F = { 434.00 \cdot 10^{-2} } \ \mathrm{kN}
+		>>> v8 = Variable('F',None,'kN') 
+		>>> print v8
+		F
 	"""
+	name = ''                   #: symbolic name
+	unit = ''                   #: physical unit
+	format = '%.2f'             #: string to be formatted by the numeric value (with '%' operation)
+	unitFormat = r'\mathrm{%s}' #: string to be formatted by physical unit string (with '%' operation)
+	exponent = 0                #: exponent for scientific representation. If 0, then no scientific representation is performed
 	def __init__(self,name,value,unit="",format='%.2f',unitFormat=r'\mathrm{%s}',exponent=0):
 		self.name = name
-		self.value = value
+		self._value = None if value is None else float(value)
 		self.unit = unit
 		self.format = format
 		self.unitFormat = unitFormat
 		self.exponent = exponent
+	def _get_value(self):
+		return self._value
+	def _set_value(self,v):
+		self._value = None if v is None else float(v)
+	value = property(_get_value,_set_value) #: numeric value. If value==None, than the Variable is considered as symbolic
 	def strSymbolic(self):
 		"""Returns string of symbolic representation of receiver (its name)
 		
@@ -122,7 +178,9 @@ class Variable:
 	
 		.. code-block:: python
 	
-%s
+			>>> v1 = Variable('a_{22}',3.45,'mm') 
+			>>> print v1.strSymbolic()
+			{a_{22}}
 		"""
 		return '{%s}'%self.name
 	def strSubstituted(self):
@@ -132,7 +190,9 @@ class Variable:
 	
 		.. code-block:: python
 	
-%s
+			>>> v1 = Variable('a_{22}',3.45,'mm') 
+			>>> print v1.strSubstituted()
+			3.45
 		"""
 		return self.strResult()
 	def strResult(self,format='',exponent=0):
@@ -144,51 +204,96 @@ class Variable:
 	
 		.. code-block:: python
 	
-%s
+			>>> v1 = Variable('a_{22}',3.45,'mm') 
+			>>> print v1.strResult()
+			3.45
 		"""
+		if self.isSymbolic():
+			return self.strSymbolic()
 		f = format if format else self.format
 		e = exponent if exponent!=0 else self.exponent
+		result = self.value
 		if e==0:
-			if self.value < 0.:
-				return r'\left( %s \right)'%f%self.value
-			return '%s'%f%self.value
+			if result < 0.:
+				return r'\left( %s \right)'%f%result
+			return '%s'%f%result
 		val = self.value*math.pow(10,-e)
 		if self.value < 0.:
 			return r'\left( %s %s \right)'%(f%val,'\cdot 10^{%d}'%e)
 		return '{ %s %s }'%(f%val,'\cdot 10^{%d}'%e)
 	def strResultWithUnit(self):
-		"""Returns string of the result of the receiver (its formatted result) ending with its units
+		r"""Returns string of the result of the receiver (its formatted result) ending with its units
 		
 		:rtype: str
 	
 		.. code-block:: python
 	
-%s
+			>>> v1 = Variable('a_{22}',3.45,'mm') 
+			>>> print v1.strResultWithUnit()
+			3.45 \ \mathrm{mm}
 		"""
 		return '%s \\ %s'%(self.strResult(),self.unitFormat%self.unit)
 	def result(self):
 		"""Returns numeric result of the receiver (its value)
 		
-		:rtype: float|int
+		:rtype: float
 	
 		.. code-block:: python
 	
-%s
+			>>> v1 = Variable('a_{22}',3.45,'mm') 
+			>>> print v1.result()
+			3.45
 		"""
+		if self.isSymbolic():
+			raise LaTeXExpressionError, "Unknown result of symbolic variable"
 		return self.value
+	def __float__(self):
+		"""Returns numeric result of the receiver
+		
+		:rtype: float
+	
+		.. code-block:: python
+	
+			>>> v1 = Variable('a_{22}',3.45,'mm') 
+			>>> print float(v1)
+			3.45
+		"""
+		return self.result()
 	def __str__(self):
-		"""Returns string representation of receiver in the form "name = value unit" """
+		r"""Returns string representation of receiver in the form "name = value unit"
+	
+		:rtype: str
+	
+		.. code-block:: python
+	
+			>>> v3 = Variable('F',4.34,'kN',exponent=-2) 
+			>>> print str(v3)
+			F = { 434.00 \cdot 10^{-2} } \ \mathrm{kN}
+			>>> v8 = Variable('F',None,'kN') 
+			>>> print str(v8)
+			F
+		"""
+		if self.isSymbolic():
+			return '%s'%(self.name)
 		return '%s = %s'%(self.name,self.strResultWithUnit())
 	def toLaTeXVariable(self,name,what='float',command='def'):
-		"""Returns latex expression converting receiver to LaTeX variable using \\def, \\newcommand, or \\renewcommand LaTeX command
+		r"""Returns latex expression converting receiver to LaTeX variable using \def, \newcommand, or \renewcommand LaTeX command
 		
-		:param str name: LaTeX name (without trailing \\\\ symbol)
+		:param str name: LaTeX name (without initial \\ symbol)
 		:param str what: what to include ('float' for numeric value, 'str' for string value (with possible scientific .10^x), 'valunit' for string value + unit , 'all' for str(self)'
-		:param str command: LaTeX command to use (without trailing \\\\ symbol) ['def','newcommand','renewcommand']
+		:param str command: LaTeX command to use (without initial \\ symbol) ['def','newcommand','renewcommand']
 	
 		.. code-block:: python
 	
-%s
+			>>> v1 = Variable('a_{22}',3.45,'mm') 
+			>>> print v1.toLaTeXVariable('AA','float')
+			\def\AA{3.45}
+			>>> print v1.toLaTeXVariable('AA','str','newcommand')
+			\newcommand{\AA}{3.45}
+			>>> print v1.toLaTeXVariable('AA','valunit','renewcommand')
+			\renewcommand{\AA}{3.45 \ \mathrm{mm}}
+			>>> print v1.toLaTeXVariable('AA','all','def')
+			\def\AA{a_{22} = 3.45 \ \mathrm{mm}}
 		"""
 		what = what.lower()
 		whats = ('float','str','valunit','all','subst')
@@ -214,7 +319,7 @@ class Variable:
 		:param Variable|Expression expr: given expression to be copied
 		:rtype: Variable"""
 		self.name = expr.name
-		self.value = expr.result()
+		self.value = None if expr.isSymbolic else float(expr)
 		self.unit = expr.unit
 		self.format = expr.format
 		self.unitFormat = expr.unitFormat
@@ -230,6 +335,10 @@ class Variable:
 		ret.unitFormat = self.unitFormat
 		ret.exponent = self.exponent
 		return ret
+	def isSymbolic(self):
+		"""Returns if receiver (or at least one of its sub-components) is purely symbolic variable without specific value
+		"""
+		return self.value is None
 Variable.__add__ = _add
 Variable.__sub__ = _sub
 Variable.__mul__ = _mul
@@ -291,16 +400,39 @@ _supportedOperations1 = (_NONE,_NEG,_POS,_ABS,_SQR,_SQRT,_SIN,_COS,_TAN,_SINH,_C
 _supportedOperations2 = (_MINUS,_DIV,_DIV2,_POW,_ROOT,_LOG)
 _supportedOperationsN = (_PLUS,_TIMES,_MAX,_MIN)
 
-class Operation:
-	"""Class representing mathematical operation applied to one, two or more objects. These objects may be of type Variable, Expression or Operation again, allowing builing a hieararchy of operations. Preferable way of creation of Operation instances is to use predefined functions (see :ref:`predefinedOperations`) or (where it is possible) standard Python operations +,-,*,/,**.
+class Operation(object):
+	r"""Class representing mathematical operation applied to one, two or more objects. These objects may be of type Variable, Expression or Operation again, allowing builing a hieararchy of operations. Preferable way of creation of Operation instances is to use predefined functions (see :ref:`predefinedOperations`) or (where it is possible) standard Python operations +,-,*,/,**.
 	
 	:param str type: type of operation
-	:param Variable(s)|Expression(s)|Operation(s) args: Variables, Expressions, Operations to be combined by receiver
+	:param Variable(s)|Expression(s)|Operation(s) args: Variables, Expressions, Operations to be combined
 	
 	.. code-block:: python 
 		
-%s
+		>>> v1 = Variable('a_{22}',3.45,'mm') 
+		>>> v2 = Variable('F',5.876934835,'kN') 
+		>>> v3 = Variable('F',4.34,'kN',exponent=-2) 
+		>>> v4 = Variable('F',2.564345,'kN',format='%.4f') 
+		>>> v5 = Variable('F',5.876934835,'kN') 
+		>>> v6 = Variable('F',-6.543,'kN') 
+		>>> v8 = Variable('F',None,'kN') 
+		>>> o3 = (v1+v2)/v3 
+		>>> print o3
+		\frac{ {a_{22}} + {F} }{ {F} } = \frac{ 3.45 + 5.88 }{ { 434.00 \cdot 10^{-2} } }
+		>>> o4 = v1 + v8 
+		>>> print o4
+		{a_{22}} + {F} = 3.45 + {F}
+		>>> e2 = Expression('E_2',(v1+v2)/v3,'mm') 
+		>>> o2 = MUL(RBRACKETS(e2+v4),v5,v6) 
+		>>> print o2
+		\left( {E_2} + {F} \right) \cdot {F} \cdot {F} = \left( 2.15 + 2.5643 \right) \cdot 5.88 \cdot \left( -6.54 \right)
+		>>> v8.value=2.34 
+		>>> print o4
+		{a_{22}} + {F} = 3.45 + 2.34
 	"""
+	type = None     #: arithmetic type of operation
+	args = []       #: arument list subjected to the operation :py:attr:`Operation.type`
+	format = '%.2f' # see :py:attr:`Variable.format`
+	exponent = 0    # see :py:attr:`Variable.exponent`
 	def __init__(self,type,*args):
 		if not type in _supportedOperations:
 			raise LaTeXExpressionError, 'operation %s not in supported operations %s'%(type,str(_supportedOperations))
@@ -313,18 +445,17 @@ class Operation:
 		for a in args:
 			if isinstance(a,(Variable,Expression,Operation)):
 				ret.append(a)
-			elif isinstance(a,int):
-				a = float(a)
+			elif isinstance(a,(float,int)):
 				ret.append(Variable('%d'%a,a,format='%d'))
 			else:
 				raise TypeError, "wrong argunemt type (%s) in Operation constructor"%a.__class__.__name__
 		return ret
 	def __str(self,what):
-		# auxiliary function to format symbolic oe substituted expression. Both are the same, the only difference os to call strSymbolic or strSubstituted on receiver args
+		# auxiliary function to format symbolic or substituted expression. Both are the same, the only difference os to call strSymbolic or strSubstituted on receiver args
 		a = self.args
 		t = self.type
 		if t in _supportedOperationsN:
-			v = (getattr(a[i],what)() for i in xrange(len(a)))
+			v = (getattr(arg,what)() for arg in a)
 			if t == _PLUS:  return r' + '.join(v)
 			if t == _TIMES: return r' \cdot '.join(v)
 			if t == _MAX:   return r'\max{\left( %s \right)}'%(', '.join(v))
@@ -370,23 +501,33 @@ class Operation:
 				raise LaTeXExpressionError, t
 		raise LaTeXExpressionError, 'operation %s not in supported operations %s'%(self.type,str(_supportedOperations))
 	def strSymbolic(self):
-		"""Returns string of symbolic representation of receiver
+		r"""Returns string of symbolic representation of receiver
 		
 		:rtype: str
 	
 		.. code-block:: python
 	
-%s
+			>>> v1 = Variable('a_{22}',3.45,'mm') 
+			>>> v2 = Variable('F',5.876934835,'kN') 
+			>>> v3 = Variable('F',4.34,'kN',exponent=-2) 
+			>>> o3 = (v1+v2)/v3 
+			>>> print o3.strSymbolic()
+			\frac{ {a_{22}} + {F} }{ {F} }
 		"""
 		return self.__str('strSymbolic')
 	def strSubstituted(self):
-		"""Returns string of substituted representation of receiver
+		r"""Returns string of substituted representation of receiver
 		
 		:rtype: str
 	
 		.. code-block:: python
 	
-%s
+			>>> v1 = Variable('a_{22}',3.45,'mm') 
+			>>> v2 = Variable('F',5.876934835,'kN') 
+			>>> v3 = Variable('F',4.34,'kN',exponent=-2) 
+			>>> o3 = (v1+v2)/v3 
+			>>> print o3.strSubstituted()
+			\frac{ 3.45 + 5.88 }{ { 434.00 \cdot 10^{-2} } }
 		"""
 		return self.__str('strSubstituted')
 	def strResult(self,format='',exponent=0):
@@ -398,9 +539,16 @@ class Operation:
 	
 		.. code-block:: python
 	
-%s
+			>>> v1 = Variable('a_{22}',3.45,'mm') 
+			>>> v2 = Variable('F',5.876934835,'kN') 
+			>>> v3 = Variable('F',4.34,'kN',exponent=-2) 
+			>>> o3 = (v1+v2)/v3 
+			>>> print o3.strResult()
+			2.15
 		"""
-		r = self.result()
+		if self.isSymbolic():
+			return self.strSymbolic()
+		r = float(self)
 		f = format if format else self.format
 		e = exponent if exponent!=0 else self.exponent
 		if e==0:
@@ -414,16 +562,21 @@ class Operation:
 	def result(self):
 		"""Returns numeric result of the receiver
 		
-		:rtype: float|int
+		:rtype: float
 	
 		.. code-block:: python
 	
-%s
+			>>> v1 = Variable('a_{22}',3.45,'mm') 
+			>>> v2 = Variable('F',5.876934835,'kN') 
+			>>> v3 = Variable('F',4.34,'kN',exponent=-2) 
+			>>> o3 = (v1+v2)/v3 
+			>>> print o3.result()
+			2.14906332604
 		"""
 		a = self.args
 		t = self.type
 		if t in _supportedOperationsN:
-			v = (a[i].result() for i in xrange(len(a)))
+			v = (float(arg) for arg in a)
 			if t == _PLUS:  return sum(v)
 			if t == _TIMES: return reduce(lambda x,y: x*y, v, 1.)
 			if t == _MAX:   return max(v)
@@ -432,8 +585,8 @@ class Operation:
 				print t
 				raise LaTeXExpressionError, t
 		if t in _supportedOperations2:
-			v0 = a[0].result()
-			v1 = a[1].result()
+			v0 = float(a[0])
+			v1 = float(a[1])
 			if t == _MINUS: return v0 - v1
 			if t == _DIV:   return v0 / v1
 			if t == _DIV2:  return v0 / v1
@@ -444,7 +597,7 @@ class Operation:
 				print t
 				raise LaTeXExpressionError, t
 		if t in _supportedOperations1:
-			v = a[0].result()
+			v = float(a[0])
 			if t == _NONE:  return v
 			if t == _NEG:   return -v
 			if t == _POS:   return v
@@ -468,8 +621,35 @@ class Operation:
 				print t
 				raise LaTeXExpressionError, t
 		raise LaTeXExpressionError, 'operation %s not in supported operations %s'%(self.type,str(_supportedOperations))
+	def __float__(self):
+		"""Returns numeric result of the receiver
+		
+		:rtype: float
+	
+		.. code-block:: python
+	
+			>>> v1 = Variable('a_{22}',3.45,'mm') 
+			>>> v2 = Variable('F',5.876934835,'kN') 
+			>>> v3 = Variable('F',4.34,'kN',exponent=-2) 
+			>>> o3 = (v1+v2)/v3 
+			>>> print float(o3)
+			2.14906332604
+		"""
+		return self.result()
 	def __str__(self):
-		"""Returns string representation of receiver in the form "symbolicExpr = substitutedExpr" """
+		r"""Returns string representation of receiver in the form "symbolicExpr = substitutedExpr"
+
+		:rtype: str
+		
+		.. code-block:: python
+	
+			>>> v1 = Variable('a_{22}',3.45,'mm') 
+			>>> v2 = Variable('F',5.876934835,'kN') 
+			>>> v3 = Variable('F',4.34,'kN',exponent=-2) 
+			>>> o3 = (v1+v2)/v3 
+			>>> print str(o3)
+			\frac{ {a_{22}} + {F} }{ {F} } = \frac{ 3.45 + 5.88 }{ { 434.00 \cdot 10^{-2} } }
+		"""
 		return '%s = %s'%(self.strSymbolic(),self.strSubstituted())
 	def toVariable(self,newName='',**kw):
 		"""Returns new Variable instance with attributes copied from receiver
@@ -477,7 +657,11 @@ class Operation:
 		:param str newName: new name of returned variable
 		:params dict kw: keyword arguments passed to Variable constructor
 		:rtype: Variable"""
-		return Variable(newName,self.result(),**kw)
+		return Variable(newName,float(self),**kw)
+	def isSymbolic(self):
+		"""Returns if receiver (or at least one of its sub-components) is purely symbolic variable without specific value
+		"""
+		return any(arg.isSymbolic() for arg in self.args)
 Operation.__add__ = _add
 Operation.__sub__ = _sub
 Operation.__mul__ = _mul
@@ -669,20 +853,46 @@ def ABRACKETS(*args):
 ######################################################################
 # Expression class
 ######################################################################
-class Expression:
-	"""Class representing mathematical expression 
+class Expression(object):
+	r"""Class representing mathematical expression 
 	
 	:param str name: symbolic name of the expression
-	:param [Variable|Expression]|Variable|Expression operations: list of lists of expressions and variables, defining the new instance hierarchy
-	:param str unit: physical unit of the variable
-	:param str format: python string to be formatted (e.g. '%%e', '%%g', '%%.4g', '%%.3f' etc.). See `Python string formatting docs <http://docs.python.org/2/library/stdtypes.html#string-formatting-operations>`_ for more details.
-	:param str unitFormat: python string to be formatted with unit (default is '\mathrm{%%s}' for non-italic units inside math mode). For no formatting use '%%s'. See `Python string formatting docs <http://docs.python.org/2/library/stdtypes.html#string-formatting-operations>`_ for more details.
+	:param Operation|Variable|Expression operation: operation of the expression
+	:param str unit: physical unit of the expression
+	:param str format: python string to be formatted with '%' operation (e.g. '%e', '%g', '%.4g', '%.3f' etc.). See `Python string formatting docs <http://docs.python.org/2/library/stdtypes.html#string-formatting-operations>`_ for more details.
+	:param str unitFormat: python string to be formatted with unit (default is '\mathrm{%s}' for non-italic units inside math mode). For no formatting use '%s'. See `Python string formatting docs <http://docs.python.org/2/library/stdtypes.html#string-formatting-operations>`_ for more details.
 	:param int exponent: exponent for scientific representation
 	
 	.. code-block:: python
 	
-%s
+		>>> v1 = Variable('a_{22}',3.45,'mm') 
+		>>> v2 = Variable('F',5.876934835,'kN') 
+		>>> v3 = Variable('F',4.34,'kN',exponent=-2) 
+		>>> v4 = Variable('F',2.564345,'kN',format='%.4f') 
+		>>> v5 = Variable('F',5.876934835,'kN') 
+		>>> v6 = Variable('F',-6.543,'kN') 
+		>>> v8 = Variable('F',None,'kN') 
+		>>> o1 = (v1 + SQRT(v2)) / (v3 * v4) + v5 
+		>>> e1 = Expression('E_1^i',SBRACKETS(o1) - SQR(v6),'kNm') 
+		>>> print e1
+		E_1^i = \left[ \frac{ {a_{22}} + \sqrt{ {F} } }{ {F} \cdot {F} } + {F} \right] - {F}^2 = \left[ \frac{ 3.45 + \sqrt{ 5.88 } }{ { 434.00 \cdot 10^{-2} } \cdot 2.5643 } + 5.88 \right] - \left( -6.54 \right)^2 = \left(-36.41\right) \ \mathrm{kNm}
+		>>> e2 = Expression('E_2',(v1+v2)/v3,'mm') 
+		>>> print e2
+		E_2 = \frac{ {a_{22}} + {F} }{ {F} } = \frac{ 3.45 + 5.88 }{ { 434.00 \cdot 10^{-2} } } = 2.15 \ \mathrm{mm}
+		>>> o4 = v1 + v8 
+		>>> e4 = Expression('E_4',o4,'mF') 
+		>>> print e4
+		E_4 = {a_{22}} + {F} = 3.45 + {F}
+		>>> v8.value=2.34 
+		>>> print e4
+		E_4 = {a_{22}} + {F} = 3.45 + 2.34 = 5.79 \ \mathrm{mF}
 	"""
+	name = ""                   #: symbolic name of the expression
+	operation = None            #: underlying :class:`.Operation` instance
+ 	unit = ""                   #: see :py:attr:`Variable.unit`
+	format = "%.2f"             #: see :py:attr:`Variable.format`
+	unitFormat = r"\mathrm{%s}" #: see :py:attr:`Variable.unitFormat`
+	exponent = 0                #: see :py:attr:`Variable.exponent`
 	def __init__(self,name,operation,unit="",format='%.2f',unitFormat=r'\mathrm{%s}',exponent=0):
 		self.name = name
 		self.operation = operation
@@ -690,6 +900,11 @@ class Expression:
 		self.format = format
 		self.unitFormat = unitFormat
 		self.exponent = exponent
+	def _get_operation(self):
+		return self.operation
+	def _set_operation(self,o):
+		self.operation = o
+	o = property(_get_operation,_set_operation) #: Shortcut for :py:meth:`operation <Expression.operation>`
 	def strSymbolic(self):
 		"""Returns string of symbolic representation of receiver (its name)
 		
@@ -697,7 +912,12 @@ class Expression:
 	
 		.. code-block:: python
 	
-%s
+			>>> v1 = Variable('a_{22}',3.45,'mm') 
+			>>> v2 = Variable('F',5.876934835,'kN') 
+			>>> v3 = Variable('F',4.34,'kN',exponent=-2) 
+			>>> e2 = Expression('E_2',(v1+v2)/v3,'mm') 
+			>>> print e2.strSymbolic()
+			{E_2}
 		"""
 		return '{%s}'%self.name
 	def strSubstituted(self):
@@ -707,7 +927,12 @@ class Expression:
 	
 		.. code-block:: python
 	
-%s
+			>>> v1 = Variable('a_{22}',3.45,'mm') 
+			>>> v2 = Variable('F',5.876934835,'kN') 
+			>>> v3 = Variable('F',4.34,'kN',exponent=-2) 
+			>>> e2 = Expression('E_2',(v1+v2)/v3,'mm') 
+			>>> print e2.strSubstituted()
+			2.15
 		"""
 		return self.strResult()
 	def strResult(self,format='',exponent=0):
@@ -719,39 +944,71 @@ class Expression:
 	
 		.. code-block:: python
 	
-%s
+			>>> v1 = Variable('a_{22}',3.45,'mm') 
+			>>> v2 = Variable('F',5.876934835,'kN') 
+			>>> v3 = Variable('F',4.34,'kN',exponent=-2) 
+			>>> e2 = Expression('E_2',(v1+v2)/v3,'mm') 
+			>>> print e2.strResult()
+			2.15
 		"""
-		r = self.result()
+		if self.isSymbolic():
+			return self.operation.strSubstituted()
+		r = float(self)
 		f = format if format else self.format
 		e = exponent if exponent!=0 else self.exponent
 		if e==0:
 			if r < 0:
 				return r'\left(%s\right)'%f%r
 			return '%s'%f%r
-		val = self.result()*math.pow(10,-e)
+		val = float(self)*math.pow(10,-e)
 		if r < 0:
 			return r'\left( %s %s \right)'%(f%val,'\cdot 10^{%d}'%e)
 		return '{ %s %s }'%(f%val,'\cdot 10^{%d}'%e)
 	def strResultWithUnit(self):
-		"""Returns string of the result of the receiver (its formatted result) ending with its units
+		r"""Returns string of the result of the receiver (its formatted result) ending with its units
 		
 		:rtype: str
 	
 		.. code-block:: python
 	
-%s
+			>>> v1 = Variable('a_{22}',3.45,'mm') 
+			>>> v2 = Variable('F',5.876934835,'kN') 
+			>>> v3 = Variable('F',4.34,'kN',exponent=-2) 
+			>>> e2 = Expression('E_2',(v1+v2)/v3,'mm') 
+			>>> print e2.strResultWithUnit()
+			2.15 \ \mathrm{mm}
 		"""
 		return '%s \\ %s'%(self.strResult(),self.unitFormat%self.unit)
 	def result(self):
 		"""Returns numeric result of the receiver
 		
-		:rtype: float|int
+		:rtype: float
 	
 		.. code-block:: python
 	
-%s
+			>>> v1 = Variable('a_{22}',3.45,'mm') 
+			>>> v2 = Variable('F',5.876934835,'kN') 
+			>>> v3 = Variable('F',4.34,'kN',exponent=-2) 
+			>>> e2 = Expression('E_2',(v1+v2)/v3,'mm') 
+			>>> print e2.result()
+			2.14906332604
 		"""
-		return self.operation.result()
+		return float(self.operation)
+	def __float__(self):
+		"""Returns numeric result of the receiver
+		
+		:rtype: float
+	
+		.. code-block:: python
+	
+			>>> v1 = Variable('a_{22}',3.45,'mm') 
+			>>> v2 = Variable('F',5.876934835,'kN') 
+			>>> v3 = Variable('F',4.34,'kN',exponent=-2) 
+			>>> e2 = Expression('E_2',(v1+v2)/v3,'mm') 
+			>>> print float(e2)
+			2.14906332604
+		"""
+		return self.result()
 	def toVariable(self,newName=''):
 		"""Returns new Variable instance with attributes copied from receiver
 	
@@ -762,24 +1019,53 @@ class Expression:
 			ret.name = newName
 		return ret
 	def __str__(self):
-		"""Returns string representation of receiver in the form "name = symbolicExpr = substitutedExpr = result unit" """
+		r"""Returns string representation of receiver in the form "name = symbolicExpr = substitutedExpr = result unit"
+		
+		:rtype: str
+
+		.. code-block:: python
+	
+			>>> v1 = Variable('a_{22}',3.45,'mm') 
+			>>> v2 = Variable('F',5.876934835,'kN') 
+			>>> v3 = Variable('F',4.34,'kN',exponent=-2) 
+			>>> e2 = Expression('E_2',(v1+v2)/v3,'mm') 
+			>>> print str(e2)
+			E_2 = \frac{ {a_{22}} + {F} }{ {F} } = \frac{ 3.45 + 5.88 }{ { 434.00 \cdot 10^{-2} } } = 2.15 \ \mathrm{mm}
+		"""
+		if self.isSymbolic():
+			return '%s = %s'%(self.name,self.operation)
 		return '%s = %s = %s'%(self.name,self.operation,self.strResultWithUnit())
 	def toLaTeXVariable(self,name,what='float',command='def'):
-		"""Returns latex expression converting receiver to LaTeX variable using \\def, \\newcommand, or \\renewcommand LaTeX command
+		r"""Returns latex expression converting receiver to LaTeX variable using \def, \newcommand, or \renewcommand LaTeX command
 		
-		:param str name: LaTeX name (without trailing \\\\ symbol)
+		:param str name: LaTeX name (without initial \\ symbol)
 		:param str what: what to include ('float' for numeric value, 'str' for string value (with possible scientific .10^x), 'valunit' for string value + unit , 'symb' for symbolic expression, 'subst' for substrituted expression and 'all' for str(self)'
-		:param str command: LaTeX command to use (without trailing \\\\ symbol) ['def','newcommand','renewcommand']
+		:param str command: LaTeX command to use (without initial \\ symbol) ['def','newcommand','renewcommand']
 	
 		.. code-block:: python
 	
-%s
+			>>> v1 = Variable('a_{22}',3.45,'mm') 
+			>>> v2 = Variable('F',5.876934835,'kN') 
+			>>> v3 = Variable('F',4.34,'kN',exponent=-2) 
+			>>> e2 = Expression('E_2',(v1+v2)/v3,'mm') 
+			>>> print e2.toLaTeXVariable('ETWO','float')
+			\def\ETWO{2.14906332604}
+			>>> print e2.toLaTeXVariable('ETWO','str','newcommand')
+			\newcommand{\ETWO}{2.15}
+			>>> print e2.toLaTeXVariable('ETWO','valunit','renewcommand')
+			\renewcommand{\ETWO}{2.15 \ \mathrm{mm}}
+			>>> print e2.toLaTeXVariable('ETWO','symb')
+			\def\ETWO{{E_2}}
+			>>> print e2.toLaTeXVariable('ETWO','subst')
+			\def\ETWO{2.15}
+			>>> print e2.toLaTeXVariable('ETWO','all','def')
+			\def\ETWO{E_2 = \frac{ {a_{22}} + {F} }{ {F} } = \frac{ 3.45 + 5.88 }{ { 434.00 \cdot 10^{-2} } } = 2.15 \ \mathrm{mm}}
 		"""
 		what = what.lower()
 		whats = ('float','str','valunit','symb','subst','all')
 		if not what in whats:
 			raise LaTeXExpressionError, '%s not in %s'%(what, whats)
-		val = self.result() if what=='float' else self.strResult() if what=='str' else self.strResultWithUnit() if what=='valunit' else self.strSymbolic() if what=='symb' else self.strSubstituted() if what=='subst' else str(self) if what=='all' else None
+		val = float(self) if what=='float' else self.strResult() if what=='str' else self.strResultWithUnit() if what=='valunit' else self.strSymbolic() if what=='symb' else self.strSubstituted() if what=='subst' else str(self) if what=='all' else None
 		return toLaTeXVariable(name,val,command)
 	def toLaTeXVariableFloat(self,name,command='def'):
 		"""Shotcut for :meth:`.Variable.toLaTeXVariable` with what='float' """
@@ -799,6 +1085,10 @@ class Expression:
 	def toLaTeXVariableAll(self,name,command='def'):
 		"""Shotcut for :meth:`.Variable.toLaTeXVariable` with what='all' """
 		return self.toLaTeXVariable(name,what='all',command=command)
+	def isSymbolic(self):
+		"""Returns if receiver (or at least one of its sub-components) is purely symbolic variable without specific value
+		"""
+		return self.operation.isSymbolic()
 Expression.__add__ = _add
 Expression.__sub__ = _sub
 Expression.__mul__ = _mul
@@ -862,7 +1152,8 @@ def saveVars(what,fileName='/tmp/latexexprglobals.out'):
 			continue
 		try:
 			my_shelf[key] = what[key]
-		except (TypeError,KeyError): pass # __builtins__, my_shelf, and imported modules can not be shelved.
+		except (TypeError,KeyError):
+			pass # __builtins__, my_shelf, and imported modules can not be shelved.
 	my_shelf.close()
 
 def loadVars(what,fileName='/tmp/latexexprglobals.out'):
@@ -880,15 +1171,21 @@ def loadVars(what,fileName='/tmp/latexexprglobals.out'):
 
 
 def toLaTeXVariable(name,what,command='def'):
-	"""Returns latex expression converting receiver to LaTeX variable using \\def, \\newcommand, or \\renewcommand LaTeX command
+	r"""Returns latex expression converting receiver to LaTeX variable using \def, \newcommand, or \renewcommand LaTeX command
 	
-	:param str name: LaTeX name (without trailing \\\\ symbol)
+	:param str name: LaTeX name (without initial \\ symbol)
 	:param str what: string of the variable body
-	:param str command: LaTeX command to use (without trailing \\\\ symbol) ['def','newcommand','renewcommand']
+	:param str command: LaTeX command to use (without initial \\ symbol) ['def','newcommand','renewcommand']
 	
 	.. code-block:: python
 	
-%s
+			>>> n,s = 'varName','some string content of the variable' 
+			>>> print toLaTeXVariable(n,s)
+			\def\varName{some string content of the variable}
+			>>> print toLaTeXVariable(n,s,'newcommand')
+			\newcommand{\varName}{some string content of the variable}
+			>>> print toLaTeXVariable(n,s,'renewcommand')
+			\renewcommand{\varName}{some string content of the variable}
 	"""
 	if command == 'def':
 		return r'\def\%s{%s}'%(name,what)
@@ -901,125 +1198,202 @@ def toLaTeXVariable(name,what,command='def'):
 
 
 
-
-
-
-######################################################################
-# LaTeX Expression testing and docstrings formation
-######################################################################
-n = 70
+# TESTING
 if __name__ == "__main__":
-	print n*'_'
-	print
-	print 'LaTeX Expression module'.center(n)
-	print '(C) 2013  Jan Stransky'.center(n)
-	print n*'_'
-	print
-	print 'TESTS:'
-	print
-del n
 
-def evalExample(lines):
-	"""Auxiliary function for doc example formatting and testing"""
-	ret = ""
-	for line in lines:
-		if 'print' in line:
-			val = eval(line.partition('print')[2])
-			ret += '\t\t\t>>> %s\n\t\t\t%s\n'%(line,val)
-			if __name__ == "__main__":
-				print '>>> %s\n%s'%(line,val)
-		else:
-			exec(line)
-			ret += '\t\t\t>>> %s \n'%line
-			if __name__ == "__main__":
-				print '>>> '+line
-	return ret
+	v1 = Variable('a_{22}',3.45,'mm')
+	print v1
+	v2 = Variable('F',5.876934835,'kN')
+	print v2
+	v3 = Variable('F',4.34,'kN',exponent=-2)
+	print v3
+	v4 = Variable('F',2.564345,'kN',format='%.4f')
+	print v4
+	v5 = Variable('F',5.876934835,'kN')
+	print v5
+	v6 = Variable('F',-6.543,'kN')
+	o1 = (v1 + SQRT(v2)) / (v3 * v4) + v5
+	print o1
+	e1 = Expression('E_1^i',SBRACKETS(o1) - SQR(v6),'kNm')
+	print e1
+	v7 = e1.toVariable()
+	print v7
+	print v7.toLaTeXVariableAll('MYV7')
+	v8 = Variable('F',None,'kN')
+	o4 = v1 + v8
+	e4 = Expression('E_4',o4,'mF')
+	print v8
+	print o4
+	print e4
+	v8.value=2.34
+	print v8
+	print o4
+	print e4
 
-# predefined documentation variables
-# TODO
-V1 = "v1 = Variable('a_{22}',3.45,'mm')"
-V2 = "v2 = Variable('F',5.876934835,'kN')"
-V3 = "v3 = Variable('F',4.34,'kN',exponent=-2)"
-V4 = "v4 = Variable('F',2.564345,'kN',format='%.4f')"
-V5 = "v5 = Variable('F',5.876934835,'kN')"
-V6 = "v6 = Variable('F',-6.543,'kN')"
-O1 = "o1 = (v1 + SQRT(v2)) / (v3 * v4) + v5"
-E1 = "e1 = Expression('E_1^i',SBRACKETS(o1) - SQR(v6),'kNm')"
-E2 = "e2 = Expression('E_2',(v1+v2)/v3,'mm')"
-O2 = "o2 = MUL(RBRACKETS(e2+v4),v5,v6)"
-O3 = "o3 = (v1+v2)/v3"
-E3 = "e2 = Expression('E_2',o3,'mm')"
+	v1 = Variable('a_{22}',3.45,'mm')
+	print v1
+	v2 = Variable('F',5.876934835,'kN')
+	print v2
+	v3 = Variable('F',4.34,'kN',exponent=-2)
+	print v3
+	v8 = Variable('F',None,'kN')
+	print v8
 
-# MODULE
-example = [V1,"print v1",V2,"print v2",V3,"print v3",V4,"print v4",V5,"print v5",V6,O1,"print o1",E1,"print e1","v7 = e1.toVariable()","print v7","print v7.toLaTeXVariableAll('MYV7')"]
-__doc__ %= evalExample(example)
+	v3 = Variable('F',4.34,'kN',exponent=-2)
+	print str(v3)
+	v8 = Variable('F',None,'kN')
+	print str(v8)
 
-# VARIABLE
-example = [V1,"print v1",V2,"print v2",V3,"print v3"]
-Variable.__doc__ %= evalExample(example)
-example = [V1,"print v1.strSymbolic()"]
-Variable.strSymbolic.__func__.__doc__ %= evalExample(example)
-example = [V1,"print v1.strSubstituted()"]
-Variable.strSubstituted.__func__.__doc__ %= evalExample(example)
-example = [V1,"print v1.strResult()"]
-Variable.strResult.__func__.__doc__ %= evalExample(example)
-example = [V1,"print v1.strResultWithUnit()"]
-Variable.strResultWithUnit.__func__.__doc__ %= evalExample(example)
-example = [V1,"print v1.result()"]
-Variable.result.__func__.__doc__ %= evalExample(example)
-example = [V1,"print v1.toLaTeXVariable('AA','float')","print v1.toLaTeXVariable('AA','str','newcommand')","print v1.toLaTeXVariable('AA','valunit','renewcommand')","print v1.toLaTeXVariable('AA','all','def')"]
-Variable.toLaTeXVariable.__func__.__doc__ %= evalExample(example)
+	v1 = Variable('a_{22}',3.45,'mm')
+	print v1.strSymbolic()
 
-# OPERATION
-example = [V1,V2,V3,V4,V5,V6,O3,"print o3",E2,O2,"print o2"]
-Operation.__doc__ %= evalExample(example)
-example = [V1,V2,V3,O3,"print o3.strSymbolic()"]
-Operation.strSymbolic.__func__.__doc__ %= evalExample(example)
-example = [V1,V2,V3,O3,"print o3.strSubstituted()"]
-Operation.strSubstituted.__func__.__doc__ %= evalExample(example)
-example = [V1,V2,V3,O3,"print o3.result()"]
-Operation.result.__func__.__doc__ %= evalExample(example)
+	v1 = Variable('a_{22}',3.45,'mm')
+	print v1.strSubstituted()
 
-# EXPRESSION
-example = [
-	V1,V2,V3,V4,V5,V6,
-	O1,
-	E1,
-	"print e1",
-	E2,
-	"print e2",
-]
-Expression.__doc__ %= evalExample(example)
-example = [V1,V2,V3,E2,"print e2.strSymbolic()"]
-Expression.strSymbolic.__func__.__doc__ %= evalExample(example)
-example = [V1,V2,V3,E2,"print e2.strSubstituted()"]
-Expression.strSubstituted.__func__.__doc__ %= evalExample(example)
-example = [V1,V2,V3,E2,"print e2.strResult()"]
-Expression.strResult.__func__.__doc__ %= evalExample(example)
-example = [V1,V2,V3,E2,"print e2.strResultWithUnit()"]
-Expression.strResultWithUnit.__func__.__doc__ %= evalExample(example)
-example = [V1,V2,V3,E2,"print e2.result()"]
-Expression.result.__func__.__doc__ %= evalExample(example)
-example = [V1,V2,V3,E2,"print e2.toLaTeXVariable('ETWO','float')","print e2.toLaTeXVariable('ETWO','str','newcommand')","print e2.toLaTeXVariable('ETWO','valunit','renewcommand')","print e2.toLaTeXVariable('ETWO','symb')","print e2.toLaTeXVariable('ETWO','subst')","print e2.toLaTeXVariable('ETWO','all','def')"]
-Expression.toLaTeXVariable.__func__.__doc__ %= evalExample(example)
+	v1 = Variable('a_{22}',3.45,'mm')
+	print v1.strResult()
 
-# OTHER
-example = ["n,s = 'varName','some string content of the variable'","print toLaTeXVariable(n,s)","print toLaTeXVariable(n,s,'newcommand')","print toLaTeXVariable(n,s,'renewcommand')"]
-toLaTeXVariable.__doc__ %= evalExample(example)
+	v1 = Variable('a_{22}',3.45,'mm')
+	print v1.strResultWithUnit()
 
-# further testing
-if __name__ == "__main__":
-	print
-	for o in (ADD,MUL,MAX,MIN):
-		evalExample((V1,V2,V3,"oo=%s(v1,v2,v3)"%o.func_name,"print oo"))
-	for o in (SUB,DIV,DIV2,POW,ROOT,LOG):
-		evalExample((V1,V2,"oo=%s(v1,v2)"%o.func_name,"print oo"))
-	for o in (NEG,POS,ABS,SQR,SQRT,SIN,COS,TAN,SINH,COSH,TANH,EXP,LN,LOG10,RBRACKETS,SBRACKETS,CBRACKETS,ABRACKETS):
-		evalExample((V1,"oo=%s(v1)"%o.func_name,"print oo")) # TODO V1?
+	v1 = Variable('a_{22}',3.45,'mm')
+	print v1.result()
 
-# cleanup
-del example, evalExample
-del V1, V2, V3, V4, V5, V6, O1, E1, E2, O2, O3, E3
+	v1 = Variable('a_{22}',3.45,'mm')
+	print float(v1)
+
+	v1 = Variable('a_{22}',3.45,'mm')
+	print v1.toLaTeXVariable('AA','float')
+	print v1.toLaTeXVariable('AA','str','newcommand')
+	print v1.toLaTeXVariable('AA','valunit','renewcommand')
+	print v1.toLaTeXVariable('AA','all','def')
+
+	v1 = Variable('a_{22}',3.45,'mm')
+	v2 = Variable('F',5.876934835,'kN')
+	v3 = Variable('F',4.34,'kN',exponent=-2)
+	v4 = Variable('F',2.564345,'kN',format='%.4f')
+	v5 = Variable('F',5.876934835,'kN')
+	v6 = Variable('F',-6.543,'kN')
+	v8 = Variable('F',None,'kN')
+	o3 = (v1+v2)/v3
+	print o3
+	o4 = v1 + v8
+	print o4
+	e2 = Expression('E_2',(v1+v2)/v3,'mm')
+	o2 = MUL(RBRACKETS(e2+v4),v5,v6)
+	print o2
+	v8.value=2.34
+	print o4
+
+	v1 = Variable('a_{22}',3.45,'mm')
+	v2 = Variable('F',5.876934835,'kN')
+	v3 = Variable('F',4.34,'kN',exponent=-2)
+	o3 = (v1+v2)/v3
+	print str(o3)
+
+	v1 = Variable('a_{22}',3.45,'mm')
+	v2 = Variable('F',5.876934835,'kN')
+	v3 = Variable('F',4.34,'kN',exponent=-2)
+	o3 = (v1+v2)/v3
+	print o3.strSymbolic()
+
+	v1 = Variable('a_{22}',3.45,'mm')
+	v2 = Variable('F',5.876934835,'kN')
+	v3 = Variable('F',4.34,'kN',exponent=-2)
+	o3 = (v1+v2)/v3
+	print o3.strSubstituted()
+
+	v1 = Variable('a_{22}',3.45,'mm')
+	v2 = Variable('F',5.876934835,'kN')
+	v3 = Variable('F',4.34,'kN',exponent=-2)
+	o3 = (v1+v2)/v3
+	print o3.strResult()
+
+	v1 = Variable('a_{22}',3.45,'mm')
+	v2 = Variable('F',5.876934835,'kN')
+	v3 = Variable('F',4.34,'kN',exponent=-2)
+	o3 = (v1+v2)/v3
+	print o3.result()
+
+	v1 = Variable('a_{22}',3.45,'mm')
+	v2 = Variable('F',5.876934835,'kN')
+	v3 = Variable('F',4.34,'kN',exponent=-2)
+	o3 = (v1+v2)/v3
+	print float(o3)
+
+	v1 = Variable('a_{22}',3.45,'mm')
+	v2 = Variable('F',5.876934835,'kN')
+	v3 = Variable('F',4.34,'kN',exponent=-2)
+	v4 = Variable('F',2.564345,'kN',format='%.4f')
+	v5 = Variable('F',5.876934835,'kN')
+	v6 = Variable('F',-6.543,'kN')
+	v8 = Variable('F',None,'kN')
+	o1 = (v1 + SQRT(v2)) / (v3 * v4) + v5
+	e1 = Expression('E_1^i',SBRACKETS(o1) - SQR(v6),'kNm')
+	print e1
+	e2 = Expression('E_2',(v1+v2)/v3,'mm')
+	print e2
+	o4 = v1 + v8
+	e4 = Expression('E_4',o4,'mF')
+	print e4
+	v8.value=2.34
+	print e4
+
+	v1 = Variable('a_{22}',3.45,'mm')
+	v2 = Variable('F',5.876934835,'kN')
+	v3 = Variable('F',4.34,'kN',exponent=-2)
+	e2 = Expression('E_2',(v1+v2)/v3,'mm')
+	print str(e2)
+
+	v1 = Variable('a_{22}',3.45,'mm')
+	v2 = Variable('F',5.876934835,'kN')
+	v3 = Variable('F',4.34,'kN',exponent=-2)
+	e2 = Expression('E_2',(v1+v2)/v3,'mm')
+	print e2.strSymbolic()
+
+	v1 = Variable('a_{22}',3.45,'mm')
+	v2 = Variable('F',5.876934835,'kN')
+	v3 = Variable('F',4.34,'kN',exponent=-2)
+	e2 = Expression('E_2',(v1+v2)/v3,'mm')
+	print e2.strSubstituted()
+
+	v1 = Variable('a_{22}',3.45,'mm')
+	v2 = Variable('F',5.876934835,'kN')
+	v3 = Variable('F',4.34,'kN',exponent=-2)
+	e2 = Expression('E_2',(v1+v2)/v3,'mm')
+	print e2.strResult()
+
+	v1 = Variable('a_{22}',3.45,'mm')
+	v2 = Variable('F',5.876934835,'kN')
+	v3 = Variable('F',4.34,'kN',exponent=-2)
+	e2 = Expression('E_2',(v1+v2)/v3,'mm')
+	print e2.strResultWithUnit()
+
+	v1 = Variable('a_{22}',3.45,'mm')
+	v2 = Variable('F',5.876934835,'kN')
+	v3 = Variable('F',4.34,'kN',exponent=-2)
+	e2 = Expression('E_2',(v1+v2)/v3,'mm')
+	print e2.result()
+
+	v1 = Variable('a_{22}',3.45,'mm')
+	v2 = Variable('F',5.876934835,'kN')
+	v3 = Variable('F',4.34,'kN',exponent=-2)
+	e2 = Expression('E_2',(v1+v2)/v3,'mm')
+	print float(e2)
+
+	v1 = Variable('a_{22}',3.45,'mm')
+	v2 = Variable('F',5.876934835,'kN')
+	v3 = Variable('F',4.34,'kN',exponent=-2)
+	e2 = Expression('E_2',(v1+v2)/v3,'mm')
+	print e2.toLaTeXVariable('ETWO','float')
+	print e2.toLaTeXVariable('ETWO','str','newcommand')
+	print e2.toLaTeXVariable('ETWO','valunit','renewcommand')
+	print e2.toLaTeXVariable('ETWO','symb')
+	print e2.toLaTeXVariable('ETWO','subst')
+	print e2.toLaTeXVariable('ETWO','all','def')
+
+	n,s = 'varName','some string content of the variable'
+	print toLaTeXVariable(n,s)
+	print toLaTeXVariable(n,s,'newcommand')
+	print toLaTeXVariable(n,s,'renewcommand')
 ######################################################################
-
-#TODO radd etc.
