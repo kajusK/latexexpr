@@ -4,7 +4,10 @@ LaTeX Expression project documentation
 .. automodule:: latexexpr
 
 .. toctree::
-	:maxdepth: 3
+    :hidden:
+    :maxdepth: 3
+
+    index
 
 
 Classes

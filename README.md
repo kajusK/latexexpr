@@ -25,6 +25,7 @@ print(f'$$ {e1} $$')
 ```
 
 ## Links
+* [Documentation](https://kajusk.github.io/latexexpr/)
 * [Original webpage](https://mech.fsv.cvut.cz/~stransky/en/software/latexexpr/)
 * [Original documentation](https://mech.fsv.cvut.cz/~stransky/software/latexexpr/doc/index.html)
 
