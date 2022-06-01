@@ -6,8 +6,8 @@ build: tests
 tests:
 	pytest
 
-publish: build tests
-	twine upload dist/*
+publish:
+	twine upload --skip-existing dist/*
 
 docs:
 	sphinx-build docs_src docs
